@@ -42,8 +42,10 @@ import { doctorService } from './services/doctorService';
 import useMatchingEngine from './hooks/useMatchingEngine';
 // ── Continuity of Care imports ──────────────────────────────────────────────────────
 import careService from './services/careService';
-import { recommendationsStore } from './services/syncService';
+import { recommendationsStore, alertsStore } from './services/syncService';
+import { getSnapshotByUserId } from './services/emergencySnapshotService';
 import UserDoctorNotice from './components/Care/UserDoctorNotice';
+import MedicalRecordsPage from './pages/MedicalRecordsPage';
 
 function App() {
   // ── Existing state (ALL UNCHANGED) ───────────────────────────────────────
@@ -72,6 +74,24 @@ function App() {
   const [recommendation, setRecommendation] = useState(
     () => user?.id ? careService.getRecommendation(user.id) : null
   );
+
+  // ── Active emergency alert state (for hospital snapshot card) ─────────────
+  const [activeAlert, setActiveAlert] = useState(null);
+
+  // Subscribe to alertsStore to get latest alert with snapshotId
+  useEffect(() => {
+    const hydrate = alertsStore.get();
+    const all = Array.isArray(hydrate) ? hydrate : [];
+    const latest = all.find(a => a.status === 'active') || null;
+    setActiveAlert(latest);
+
+    const unsub = alertsStore.subscribe((alerts) => {
+      const arr = Array.isArray(alerts) ? alerts : [];
+      const latest = arr.find(a => a.status === 'active') || null;
+      setActiveAlert(latest);
+    });
+    return unsub;
+  }, []);
 
   // Subscribe to recommendationsStore for instant cross-tab sync
   useEffect(() => {
@@ -211,14 +231,23 @@ function App() {
         distance: formatDistance(totalDistKm),
       }));
 
-      // ── Trigger Continuity of Care flow ──────────────────────────────────────
+      // ── Trigger Continuity of Care flow (with snapshot if available) ─────────────
       if (user?.primaryDoctorId) {
-        careService.triggerEmergencyFlow(
-          user,
-          targetHospital,
-          nearestAmb,
-          formatETA(totalDistKm)
-        );
+        // Fetch snapshot non-blocking — don't delay ambulance dispatch
+        getSnapshotByUserId(user.id)
+          .then(({ data: snap }) => {
+            careService.triggerEmergencyFlow(
+              user,
+              targetHospital,
+              nearestAmb,
+              formatETA(totalDistKm),
+              snap?.id || null   // snapshotId — null if no records uploaded yet
+            );
+          })
+          .catch(() => {
+            // Fallback — trigger without snapshot if Supabase unreachable
+            careService.triggerEmergencyFlow(user, targetHospital, nearestAmb, formatETA(totalDistKm), null);
+          });
       }
       // ─────────────────────────────────────────────────────────────────────
 
@@ -407,6 +436,7 @@ function App() {
           onUpdateAmbulanceDriver={handleUpdateAmbulanceDriver}
           onAddAmbulance={handleAddAmbulance}
           recommendation={recommendation}
+          activeAlert={activeAlert}
         />
       </>
     );
@@ -535,6 +565,11 @@ function App() {
         <div style={{ position: 'absolute', inset: 0, bottom: '64px', overflow: 'hidden' }}>
           <GovtSchemes isDark={isDark} />
         </div>
+      )}
+
+      {/* ── Medical Records tab ───────────────────────────────────────────── */}
+      {activeTab === 'records' && (
+        <MedicalRecordsPage user={user} isDark={isDark} />
       )}
 
       {/* ── Bottom Sheet (overlays map, map tab only) ─────────────────────── */}

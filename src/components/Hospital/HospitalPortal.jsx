@@ -14,6 +14,7 @@ import DoctorManager from './DoctorManager';
 import IncomingPatient from './IncomingPatient';
 import AmbulanceFleet from './AmbulanceFleet';
 import HospitalSpecialistBanner from '../Care/HospitalSpecialistBanner';
+import EmergencySnapshotCard from '../Records/EmergencySnapshotCard';
 import {
   LayoutDashboard, BedDouble, Stethoscope, Ambulance, LogOut,
   TrendingUp, Clock, Shield, Activity
@@ -41,6 +42,7 @@ const HospitalPortal = ({
   onAddAmbulance,
   // ── Continuity of Care ────────────────────────────────────────────────
   recommendation = null, // { text, doctorName, timestamp } | null
+  activeAlert    = null, // latest emergency alert (carries snapshotId if patient has records)
 }) => {
   const { user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
@@ -107,6 +109,11 @@ const HospitalPortal = ({
           <div className="space-y-4 animate-fade-in">
             {/* Specialist banner — shown when an external doctor is assisting */}
             <HospitalSpecialistBanner recommendation={recommendation} isDark={isDark} />
+
+            {/* Medical snapshot — shown when incoming patient has uploaded records */}
+            {activeAlert?.snapshotId && (
+              <EmergencySnapshotCard snapshotId={activeAlert.snapshotId} isDark={isDark} compact={true} />
+            )}
 
             {!hospital ? (
               <div className="flex flex-col items-center justify-center py-16">

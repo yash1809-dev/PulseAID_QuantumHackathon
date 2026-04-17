@@ -6,12 +6,13 @@
  */
 
 import React from 'react';
-import { Map, Stethoscope, User, Landmark } from 'lucide-react';
+import { Map, Stethoscope, User, Landmark, FileHeart } from 'lucide-react';
 
 const TABS = [
   { id: 'map',     label: 'Map',     Icon: Map },
   { id: 'doctors', label: 'Doctors', Icon: Stethoscope },
   { id: 'schemes', label: 'Schemes', Icon: Landmark },
+  { id: 'records', label: 'Records', Icon: FileHeart },
   { id: 'profile', label: 'Profile', Icon: User },
 ];
 

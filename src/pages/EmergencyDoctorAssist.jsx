@@ -14,6 +14,7 @@ import EmergencyAlertCard from '../components/Care/EmergencyAlertCard';
 import LiveVitalsPanel    from '../components/Care/LiveVitalsPanel';
 import PatientReportsPanel from '../components/Care/PatientReportsPanel';
 import RecommendationModal from '../components/Care/RecommendationModal';
+import EmergencySnapshotCard from '../components/Records/EmergencySnapshotCard';
 import { sendRecommendation }  from '../services/careService';
 
 const EmergencyDoctorAssist = ({
@@ -112,6 +113,14 @@ const EmergencyDoctorAssist = ({
           }}
           onSendRecommendation={() => setShowModal(true)}
         />
+
+        {/* 1b — Emergency medical snapshot (shown when patient has uploaded records) */}
+        {localAlert?.snapshotId && (
+          <>
+            <SectionLabel label="🛡️ Patient Medical Snapshot" isDark={isDark} />
+            <EmergencySnapshotCard snapshotId={localAlert.snapshotId} isDark={isDark} compact={true} />
+          </>
+        )}
 
         {/* 2 — Live vitals */}
         <SectionLabel label="❤️ Live Vitals (Simulated)" isDark={isDark} />

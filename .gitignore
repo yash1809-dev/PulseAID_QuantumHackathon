@@ -29,12 +29,13 @@ Thumbs.db
 *.sln
 *.sw?
 
-# ── Secrets (keep .env tracked for hackathon demo — ONLY Mapbox public token) ─
-# .env intentionally NOT ignored so reviewers can run the project directly.
-# Do NOT commit any private keys, DB credentials, or payment secrets here.
+# ── Secrets ───────────────────────────────────────────────────────────────────
+.env
 .env.local
 .env.production
 .env.*.local
+.env.test
+.env.development
 
 # ── Misc ──────────────────────────────────────────────────────────────────────
 coverage

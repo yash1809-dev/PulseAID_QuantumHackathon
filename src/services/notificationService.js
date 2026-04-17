@@ -37,7 +37,7 @@ let _nextId = Date.now();
  * @param {object} ambulance  - Assigned ambulance object
  * @returns {object} alertObject
  */
-export function notifyDoctor(doctorId, patient, hospital, eta, ambulance) {
+export function notifyDoctor(doctorId, patient, hospital, eta, ambulance, snapshotId = null) {
   const alert = {
     id: `alert-${_nextId++}`,
     doctorId,
@@ -55,6 +55,7 @@ export function notifyDoctor(doctorId, patient, hospital, eta, ambulance) {
     status: 'active', // 'active' | 'reviewing' | 'resolved'
     doctorJoined: false,
     recommendation: null,
+    snapshotId,   // UUID of emergency_snapshot row; null if patient has no records
   };
 
   // Write to synced store (replaces any previous alert for same doctor+patient)

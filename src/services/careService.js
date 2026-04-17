@@ -26,7 +26,7 @@ import { recommendationsStore } from './syncService';
  * @param {string} eta        - Formatted ETA string
  * @returns {object|null} alert if doctor was found
  */
-export function triggerEmergencyFlow(user, hospital, ambulance, eta) {
+export function triggerEmergencyFlow(user, hospital, ambulance, eta, snapshotId = null) {
   if (!user?.primaryDoctorId) return null;
 
   try {
@@ -35,7 +35,8 @@ export function triggerEmergencyFlow(user, hospital, ambulance, eta) {
       user,
       hospital,
       eta,
-      ambulance
+      ambulance,
+      snapshotId   // ← passed to alert object for doctor/hospital UIs
     );
     return alert;
   } catch (err) {
