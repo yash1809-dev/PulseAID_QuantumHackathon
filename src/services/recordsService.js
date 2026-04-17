@@ -28,15 +28,21 @@ export async function uploadFile(file, userId) {
   const timestamp = Date.now();
   const path      = `${userId}/${timestamp}_${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
 
-  const { error } = await supabase.storage
+  console.log('[recordsService] 📤 Uploading to bucket:', BUCKET, 'path:', path);
+  const { data, error } = await supabase.storage
     .from(BUCKET)
     .upload(path, file, { upsert: false });
 
   if (error) {
-    console.error('[recordsService] uploadFile error:', error.message);
+    console.error('[recordsService] ❌ Upload failed:', {
+      message: error.message,
+      status: error.status,
+      error: error
+    });
     return { url: null, error: error.message };
   }
 
+  console.log('[recordsService] ✅ Upload success, getting public URL...');
   const { data: { publicUrl } } = supabase.storage
     .from(BUCKET)
     .getPublicUrl(path);
@@ -59,6 +65,7 @@ export async function uploadFile(file, userId) {
  * @returns {{ data: object|null, error: string|null }}
  */
 export async function saveRecord({ user_id, file_url, file_type, extracted, confidence, verified = false }) {
+  console.log('[recordsService] 💾 Saving metadata to table:', TABLE, { user_id, file_type });
   const { data, error } = await supabase
     .from(TABLE)
     .insert([{
@@ -68,15 +75,21 @@ export async function saveRecord({ user_id, file_url, file_type, extracted, conf
       extracted,
       confidence,
       verified,
-      raw_text: null, // Gemini processes inline, no separate raw text
+      raw_text: null,
     }])
     .select()
     .single();
 
   if (error) {
-    console.error('[recordsService] saveRecord error:', error.message);
+    console.error('[recordsService] ❌ saveRecord failed:', {
+      message: error.message,
+      details: error.details,
+      hint: error.hint,
+      code: error.code
+    });
     return { data: null, error: error.message };
   }
+  console.log('[recordsService] ✅ Metadata saved:', data.id);
   return { data, error: null };
 }
 

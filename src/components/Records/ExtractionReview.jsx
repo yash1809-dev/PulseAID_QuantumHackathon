@@ -117,7 +117,7 @@ const ExtractionReview = ({ extractionResult, onConfirm, onCancel, isDark = fals
   }
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', flexDirection: 'column' }}
+    <div style={{ position: 'fixed', inset: 0, zIndex: 99999, display: 'flex', flexDirection: 'column' }}
       className={isDark ? 'bg-slate-900' : 'bg-gray-50'}
     >
       {/* Header */}
