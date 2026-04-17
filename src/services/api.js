@@ -1,4 +1,5 @@
 import { initialHospitals, initialAmbulances } from '../data/mockData';
+import { shiftCoordinates } from '../utils/geo';
 
 // Simulated delay to mimic real network requests
 const simulateDelay = (ms = 500) => new Promise(resolve => setTimeout(resolve, ms));
@@ -19,9 +20,10 @@ export const MockAPI = {
    * GET /ambulances
    * Returns list of all ambulances
    */
-  getAmbulances: async (currentAmbulances) => {
+  getAmbulances: async (currentAmbulances, userLocation = null) => {
     await simulateDelay();
-    return currentAmbulances || initialAmbulances;
+    const base = currentAmbulances || initialAmbulances;
+    return shiftCoordinates(base, userLocation);
   },
 
   /**

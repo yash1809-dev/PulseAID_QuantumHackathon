@@ -53,7 +53,6 @@ const BottomSheet = ({
 
   // Determine which "view" to show based on height
   const showFull = sheetHeight > snapHalf - 40;
-  const showFilters = sheetHeight > 180;
 
   const snapTo = useCallback((target) => {
     setSheetHeight(target);
@@ -201,15 +200,7 @@ const BottomSheet = ({
             <div className={`flex-1 h-px ${dividerColor}`} />
           </div>
 
-          {/* Filters */}
-          {showFilters && (
-            <FilterPanel
-              insurance={insurance} setInsurance={setInsurance}
-              budget={budget} setBudget={setBudget}
-              priority={priority} setPriority={setPriority}
-              isDark={isDark}
-            />
-          )}
+
 
           {/* Hospital List */}
           <HospitalList

@@ -224,18 +224,9 @@ const MapContainer = ({
   return (
     <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, overflow: 'hidden' }}>
       <div ref={mapContainerRef} style={{ width: '100%', height: '100%', position: 'absolute' }} />
-      
       {/* Legend Overlay */}
       <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-4 py-3 rounded-2xl shadow-lg border border-gray-100">
-        <h1 className="text-base font-extrabold text-gray-800 tracking-tight mb-2 uppercase">ICU Tracker — Pune</h1>
-        
-        {/* DEBUG INFO */}
-        <div className="mb-2 p-2 bg-red-50 rounded border border-red-100 text-[10px] space-y-1">
-          <div><span className="font-bold">Token:</span> {import.meta.env.VITE_MAPBOX_TOKEN ? (import.meta.env.VITE_MAPBOX_TOKEN.substring(0, 15) + '...') : 'NULL (Check .env + Restart)'}</div>
-          <div><span className="font-bold">Error:</span> {mapError || 'None'}</div>
-          <div><span className="font-bold">State:</span> {mapLoaded ? 'Loaded' : 'Waiting...'}</div>
-        </div>
-
+        <h1 className="text-base font-extrabold text-gray-800 tracking-tight mb-2 uppercase">PulseAID ICU Tracker</h1>
         <div className="flex flex-wrap gap-x-4 gap-y-1">
           <div className="flex items-center gap-1.5">
             <div className="w-3 h-3 rounded-full bg-green-500 border border-white" />

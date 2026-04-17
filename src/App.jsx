@@ -126,9 +126,9 @@ function App() {
     const loadData = async () => {
       try {
         const [hospData, ambData, docData, schemeData] = await Promise.all([
-          hospitalService.getAll(),    // merged base + extended
-          MockAPI.getAmbulances(),     // existing unchanged
-          doctorService.getAll(),      // new
+          hospitalService.getAll(userLocation),        // Pass location to shift mock data
+          MockAPI.getAmbulances(null, userLocation),   // Pass location to shift mock data
+          doctorService.getAll(),      
           import('./services/schemeService').then(m => m.schemeService.getAll())
         ]);
         setHospitals(hospData);
@@ -142,7 +142,7 @@ function App() {
       }
     };
     loadData();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, userLocation]);
 
   // ── Simulation Engine (UNCHANGED) ────────────────────────────────────────
   useSimulation({

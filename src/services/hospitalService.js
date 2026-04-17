@@ -9,6 +9,7 @@
 
 import { initialHospitals } from '../data/mockData';
 import { extendedHospitals } from '../data/hospitals';
+import { shiftCoordinates } from '../utils/geo';
 
 const simulateDelay = (ms = 300) => new Promise(r => setTimeout(r, ms));
 
@@ -27,9 +28,10 @@ export const hospitalService = {
    * GET /hospitals — merged list with ICU data.
    * Call once on app mount; pass result to central state.
    */
-  getAll: async () => {
+  getAll: async (userLocation = null) => {
     await simulateDelay();
-    return mergeHospitals(initialHospitals);
+    const merged = mergeHospitals(initialHospitals);
+    return shiftCoordinates(merged, userLocation);
   },
 
   /**

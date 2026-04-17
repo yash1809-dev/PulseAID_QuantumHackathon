@@ -59,3 +59,26 @@ export const formatETA = (distanceKm, speedKmh = 40) => {
   if (mins < 1) return '< 1 min';
   return `${mins} min${mins > 1 ? 's' : ''}`;
 };
+
+/**
+ * Portable Mock Data: Shift mock coordinates to be relative to a new center.
+ * Used for testing in cities other than Pune.
+ */
+const PUNE_CENTER = { lat: 18.5204, lng: 73.8567 };
+
+export const shiftCoordinates = (items, targetCenter) => {
+  if (!targetCenter) return items;
+
+  // Only shift if target is > 50km from Pune (prevents jitter if actually in Pune)
+  const distFromPune = getDistanceKm(PUNE_CENTER.lat, PUNE_CENTER.lng, targetCenter.lat, targetCenter.lng);
+  if (distFromPune < 50) return items;
+
+  const latDiff = targetCenter.lat - PUNE_CENTER.lat;
+  const lngDiff = targetCenter.lng - PUNE_CENTER.lng;
+
+  return items.map(item => ({
+    ...item,
+    lat: item.lat + latDiff,
+    lng: item.lng + lngDiff
+  }));
+};
