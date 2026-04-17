@@ -7,7 +7,7 @@
     "experience": 18,
     "rating": 4.8,
     "avatar": "https://api.dicebear.com/7.x/personas/svg?seed=ArjunMehta",
-    "bio": "Senior interventional cardiologist with 18 years in advanced cardiac procedures.",
+    "bio": "Senior interventional cardiologist with 18 years in advanced cardiac procedures. Primary care physician for cardiac patients at Ruby Hall Clinic.",
     "schedule": {
       "Monday": [
         { "hospitalId": "hosp-001", "time": "09:00 AM - 12:00 PM" },
@@ -17,7 +17,7 @@
       "Wednesday": [{ "hospitalId": "hosp-001", "time": "09:00 AM - 02:00 PM" }],
       "Thursday": [],
       "Friday": [{ "hospitalId": "hosp-004", "time": "10:00 AM - 04:00 PM" }],
-      "Saturday": [],
+      "Saturday": [{ "hospitalId": "hosp-001", "time": "10:00 AM - 01:00 PM" }],
       "Sunday": []
     }
   },
@@ -29,7 +29,7 @@
     "experience": 14,
     "rating": 4.7,
     "avatar": "https://api.dicebear.com/7.x/personas/svg?seed=PriyaSharma",
-    "bio": "Specialist in stroke management and epilepsy treatment.",
+    "bio": "Specialist in stroke management, epilepsy, and chronic migraine treatment. Primary physician for neurological patients at Ruby Hall Clinic.",
     "schedule": {
       "Monday": [],
       "Tuesday": [
@@ -60,6 +60,240 @@
       "Tuesday": [{ "hospitalId": "hosp-003", "time": "09:00 AM - 01:00 PM" }],
       "Wednesday": [],
       "Thursday": [{ "hospitalId": "hosp-006", "time": "10:00 AM - 04:00 PM" }],
+      "Friday": [],
+      "Saturday": [],
+      "Sunday": []
+    }
+  },
+  {
+    "id": "doc-004",
+    "name": "Dr. Sunita Desai",
+    "specialty": "Pediatrics",
+    "qualification": "MD (Pediatrics), DNB",
+    "experience": 12,
+    "rating": 4.5,
+    "avatar": "https://api.dicebear.com/7.x/personas/svg?seed=SunitaDesai",
+    "bio": "Dedicated pediatric specialist with focus on neonatal care.",
+    "schedule": {
+      "Monday": [{ "hospitalId": "hosp-002", "time": "09:00 AM - 02:00 PM" }],
+      "Tuesday": [],
+      "Wednesday": [{ "hospitalId": "hosp-005", "time": "10:00 AM - 04:00 PM" }],
+      "Thursday": [],
+      "Friday": [
+        { "hospitalId": "hosp-002", "time": "09:00 AM - 01:00 PM" },
+        { "hospitalId": "hosp-005", "time": "02:00 PM - 06:00 PM" }
+      ],
+      "Saturday": [{ "hospitalId": "hosp-002", "time": "09:00 AM - 01:00 PM" }],
+      "Sunday": []
+    }
+  },
+  {
+    "id": "doc-005",
+    "name": "Dr. Vikram Patil",
+    "specialty": "Neurology",
+    "qualification": "MD, DM — KEM Hospital Mumbai",
+    "experience": 10,
+    "rating": 4.4,
+    "avatar": "https://api.dicebear.com/7.x/personas/svg?seed=VikramPatil",
+    "bio": "Neurologist specializing in movement disorders and headache management.",
+    "schedule": {
+      "Monday": [],
+      "Tuesday": [{ "hospitalId": "hosp-003", "time": "11:00 AM - 04:00 PM" }],
+      "Wednesday": [],
+      "Thursday": [{ "hospitalId": "hosp-007", "time": "09:00 AM - 03:00 PM" }],
+      "Friday": [],
+      "Saturday": [],
+      "Sunday": []
+    }
+  },
+  {
+    "id": "doc-006",
+    "name": "Dr. Meena Joshi",
+    "specialty": "Oncology",
+    "qualification": "MD, DNB (Oncology)",
+    "experience": 16,
+    "rating": 4.6,
+    "avatar": "https://api.dicebear.com/7.x/personas/svg?seed=MeenaJoshi",
+    "bio": "Medical oncologist with expertise in chemotherapy and targeted therapy.",
+    "schedule": {
+      "Monday": [{ "hospitalId": "hosp-004", "time": "10:00 AM - 03:00 PM" }],
+      "Tuesday": [],
+      "Wednesday": [{ "hospitalId": "hosp-008", "time": "09:00 AM - 02:00 PM" }],
+      "Thursday": [],
+      "Friday": [
+        { "hospitalId": "hosp-004", "time": "10:00 AM - 01:00 PM" },
+        { "hospitalId": "hosp-008", "time": "02:00 PM - 05:00 PM" }
+      ],
+      "Saturday": [],
+      "Sunday": []
+    }
+  },
+  {
+    "id": "doc-007",
+    "name": "Dr. Amit Choudhary",
+    "specialty": "Spine Surgery",
+    "qualification": "MS (Ortho), Fellowship Spine Surgery — USA",
+    "experience": 19,
+    "rating": 4.9,
+    "avatar": "https://api.dicebear.com/7.x/personas/svg?seed=AmitChoudhary",
+    "bio": "Internationally trained spine surgeon with over 2000 successful procedures.",
+    "schedule": {
+      "Monday": [],
+      "Tuesday": [],
+      "Wednesday": [{ "hospitalId": "hosp-001", "time": "09:00 AM - 03:00 PM" }],
+      "Thursday": [],
+      "Friday": [{ "hospitalId": "hosp-006", "time": "10:00 AM - 04:00 PM" }],
+      "Saturday": [],
+      "Sunday": []
+    }
+  },
+  {
+    "id": "doc-008",
+    "name": "Dr. Rekha Nair",
+    "specialty": "Gynecology",
+    "qualification": "MD, MS (Gynecology & Obstetrics)",
+    "experience": 15,
+    "rating": 4.5,
+    "avatar": "https://api.dicebear.com/7.x/personas/svg?seed=RekhaNair",
+    "bio": "Specialist in high-risk pregnancies and minimally invasive gynecology.",
+    "schedule": {
+      "Monday": [{ "hospitalId": "hosp-002", "time": "08:00 AM - 12:00 PM" }],
+      "Tuesday": [{ "hospitalId": "hosp-007", "time": "09:00 AM - 02:00 PM" }],
+      "Wednesday": [],
+      "Thursday": [{ "hospitalId": "hosp-002", "time": "10:00 AM - 03:00 PM" }],
+      "Friday": [{ "hospitalId": "hosp-007", "time": "08:00 AM - 01:00 PM" }],
+      "Saturday": [],
+      "Sunday": []
+    }
+  },
+  {
+    "id": "doc-009",
+    "name": "Dr. Suresh Bhosale",
+    "specialty": "Urology",
+    "qualification": "MS, MCh (Urology)",
+    "experience": 20,
+    "rating": 4.4,
+    "avatar": "https://api.dicebear.com/7.x/personas/svg?seed=SureshBhosale",
+    "bio": "Senior urologist specializing in robotic-assisted surgeries.",
+    "schedule": {
+      "Monday": [{ "hospitalId": "hosp-003", "time": "10:00 AM - 02:00 PM" }],
+      "Tuesday": [],
+      "Wednesday": [],
+      "Thursday": [{ "hospitalId": "hosp-008", "time": "11:00 AM - 04:00 PM" }],
+      "Friday": [],
+      "Saturday": [],
+      "Sunday": []
+    }
+  },
+  {
+    "id": "doc-010",
+    "name": "Dr. Kavita Rao",
+    "specialty": "Gastroenterology",
+    "qualification": "MD, DM (Gastroenterology)",
+    "experience": 11,
+    "rating": 4.3,
+    "avatar": "https://api.dicebear.com/7.x/personas/svg?seed=KavitaRao",
+    "bio": "Expert in endoscopy, liver disease, and IBD management.",
+    "schedule": {
+      "Monday": [],
+      "Tuesday": [{ "hospitalId": "hosp-004", "time": "09:00 AM - 01:00 PM" }],
+      "Wednesday": [{ "hospitalId": "hosp-004", "time": "10:00 AM - 02:00 PM" }],
+      "Thursday": [],
+      "Friday": [],
+      "Saturday": [{ "hospitalId": "hosp-004", "time": "09:00 AM - 01:00 PM" }],
+      "Sunday": []
+    }
+  },
+  {
+    "id": "doc-011",
+    "name": "Dr. Sanjay Wagh",
+    "specialty": "General Surgery",
+    "qualification": "MS (General Surgery), FICS",
+    "experience": 13,
+    "rating": 4.2,
+    "avatar": "https://api.dicebear.com/7.x/personas/svg?seed=SanjayWagh",
+    "bio": "General and laparoscopic surgeon with a focus on emergency procedures.",
+    "schedule": {
+      "Monday": [{ "hospitalId": "hosp-005", "time": "08:00 AM - 02:00 PM" }],
+      "Tuesday": [{ "hospitalId": "hosp-005", "time": "08:00 AM - 02:00 PM" }],
+      "Wednesday": [{ "hospitalId": "hosp-005", "time": "08:00 AM - 02:00 PM" }],
+      "Thursday": [{ "hospitalId": "hosp-005", "time": "08:00 AM - 02:00 PM" }],
+      "Friday": [{ "hospitalId": "hosp-005", "time": "08:00 AM - 02:00 PM" }],
+      "Saturday": [],
+      "Sunday": []
+    }
+  },
+  {
+    "id": "doc-012",
+    "name": "Dr. Anjali Tiwari",
+    "specialty": "General Medicine",
+    "qualification": "MD (Internal Medicine), MRCP",
+    "experience": 9,
+    "rating": 4.1,
+    "avatar": "https://api.dicebear.com/7.x/personas/svg?seed=AnjaliTiwari",
+    "bio": "Internal medicine physician specializing in diabetes, hypertension, and metabolic disorders. Primary care physician for diabetic patients at KEM Hospital.",
+    "schedule": {
+      "Monday": [{ "hospitalId": "hosp-005", "time": "10:00 AM - 04:00 PM" }],
+      "Tuesday": [],
+      "Wednesday": [{ "hospitalId": "hosp-005", "time": "10:00 AM - 04:00 PM" }],
+      "Thursday": [],
+      "Friday": [{ "hospitalId": "hosp-005", "time": "10:00 AM - 04:00 PM" }],
+      "Saturday": [{ "hospitalId": "hosp-005", "time": "09:00 AM - 01:00 PM" }],
+      "Sunday": []
+    }
+  },
+  {
+    "id": "doc-013",
+    "name": "Dr. Nitin More",
+    "specialty": "Sports Medicine",
+    "qualification": "MS (Ortho), Diploma Sports Medicine — Germany",
+    "experience": 8,
+    "rating": 4.5,
+    "avatar": "https://api.dicebear.com/7.x/personas/svg?seed=NitinMore",
+    "bio": "Sports medicine specialist treating athletes at national and international levels.",
+    "schedule": {
+      "Monday": [],
+      "Tuesday": [{ "hospitalId": "hosp-006", "time": "09:00 AM - 01:00 PM" }],
+      "Wednesday": [],
+      "Thursday": [{ "hospitalId": "hosp-006", "time": "02:00 PM - 06:00 PM" }],
+      "Friday": [],
+      "Saturday": [{ "hospitalId": "hosp-006", "time": "09:00 AM - 01:00 PM" }],
+      "Sunday": []
+    }
+  },
+  {
+    "id": "doc-014",
+    "name": "Dr. Fatima Sheikh",
+    "specialty": "ENT",
+    "qualification": "MS (ENT), Fellowship Skull Base Surgery",
+    "experience": 10,
+    "rating": 4.3,
+    "avatar": "https://api.dicebear.com/7.x/personas/svg?seed=FatimaSheikh",
+    "bio": "ENT surgeon specializing in hearing loss and cochlear implants.",
+    "schedule": {
+      "Monday": [{ "hospitalId": "hosp-007", "time": "10:00 AM - 02:00 PM" }],
+      "Tuesday": [],
+      "Wednesday": [{ "hospitalId": "hosp-007", "time": "10:00 AM - 02:00 PM" }],
+      "Thursday": [],
+      "Friday": [{ "hospitalId": "hosp-007", "time": "10:00 AM - 02:00 PM" }],
+      "Saturday": [],
+      "Sunday": []
+    }
+  },
+  {
+    "id": "doc-015",
+    "name": "Dr. Prakash Kulkarni",
+    "specialty": "Pulmonology",
+    "qualification": "MD, DM (Pulmonology)",
+    "experience": 17,
+    "rating": 4.2,
+    "avatar": "https://api.dicebear.com/7.x/personas/svg?seed=PrakashKulkarni",
+    "bio": "Pulmonologist specializing in COPD, asthma, and sleep disorders.",
+    "schedule": {
+      "Monday": [],
+      "Tuesday": [{ "hospitalId": "hosp-008", "time": "09:00 AM - 01:00 PM" }],
+      "Wednesday": [],
+      "Thursday": [{ "hospitalId": "hosp-008", "time": "02:00 PM - 06:00 PM" }],
       "Friday": [],
       "Saturday": [],
       "Sunday": []

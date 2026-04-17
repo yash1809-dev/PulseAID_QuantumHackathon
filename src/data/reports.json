@@ -1,0 +1,182 @@
+{
+  "u-001": {
+    "reports": [
+      {
+        "id": "rep-001-1",
+        "date": "2025-04-10",
+        "type": "Holter Monitor (24h)",
+        "summary": "Frequent PVCs detected. Paroxysmal atrial fibrillation — 3 episodes.",
+        "doctor": "Dr. Arjun Mehta",
+        "hospital": "Ruby Hall Clinic",
+        "details": "24h Holter: Average HR 88 bpm. 3 episodes of PAF (longest 14 minutes). 1240 PVCs (5.2% burden). No sustained VT. Recommend antiarrhythmic escalation and cardiology review.",
+        "status": "critical"
+      },
+      {
+        "id": "rep-001-2",
+        "date": "2025-01-18",
+        "type": "Echocardiography + Stress Test",
+        "summary": "EF 48% (mildly reduced). Inducible ischemia in LAD territory.",
+        "doctor": "Dr. Arjun Mehta",
+        "hospital": "Ruby Hall Clinic",
+        "details": "2D Echo: EF 48%, Grade 1 diastolic dysfunction. Stress Echo: Inducible wall motion abnormality in anterior wall at 85% MPHR. Suggests LAD territory ischemia. Stent from 2019 — re-stenosis cannot be excluded.",
+        "status": "reviewed"
+      },
+      {
+        "id": "rep-001-3",
+        "date": "2019-06-12",
+        "type": "PTCA + Stent Placement",
+        "summary": "DES placed in LAD. Successful revascularization. No complications.",
+        "doctor": "Dr. Arjun Mehta",
+        "hospital": "Ruby Hall Clinic",
+        "details": "Coronary angiography: 90% LAD stenosis. Drug-eluting stent (Xience 3.0×28mm) placed. TIMI-3 flow achieved post-procedure. Patient discharged Day 3 on DAPT.",
+        "status": "reviewed"
+      }
+    ],
+    "prescriptions": [
+      {
+        "id": "presc-001-1",
+        "date": "2025-04-10",
+        "drug": "Amiodarone 200mg",
+        "frequency": "Twice daily (loading), then once daily",
+        "duration": "Ongoing",
+        "doctor": "Dr. Arjun Mehta",
+        "indication": "Paroxysmal atrial fibrillation, PVC suppression"
+      },
+      {
+        "id": "presc-001-2",
+        "date": "2025-04-10",
+        "drug": "Rivaroxaban 20mg",
+        "frequency": "Once daily with evening meal",
+        "duration": "Ongoing",
+        "doctor": "Dr. Arjun Mehta",
+        "indication": "Anticoagulation — PAF stroke prevention"
+      },
+      {
+        "id": "presc-001-3",
+        "date": "2025-04-10",
+        "drug": "Metoprolol Succinate 50mg",
+        "frequency": "Once daily morning",
+        "duration": "Ongoing",
+        "doctor": "Dr. Arjun Mehta",
+        "indication": "Rate control, anti-ischemic"
+      }
+    ],
+    "testHistory": [
+      { "date": "2025-04-10", "test": "24h Holter Monitor", "result": "PAF + PVC burden 5.2% — critical" },
+      { "date": "2025-01-18", "test": "Stress Echocardiography", "result": "Inducible ischemia LAD" },
+      { "date": "2024-11-15", "test": "Troponin I", "result": "0.04 ng/mL (mildly elevated)" },
+      { "date": "2024-09-20", "test": "BNP", "result": "245 pg/mL (elevated)" },
+      { "date": "2019-06-12", "test": "Coronary Angiography", "result": "90% LAD — stented" }
+    ]
+  },
+  "u-002": {
+    "reports": [
+      {
+        "id": "rep-002-1",
+        "date": "2025-04-02",
+        "type": "HbA1c + Blood Panel",
+        "summary": "HbA1c 8.2% — poorly controlled diabetes. BP elevated.",
+        "doctor": "Dr. Anjali Tiwari",
+        "hospital": "KEM Hospital",
+        "details": "HbA1c: 8.2% (target <7%). Fasting glucose: 186 mg/dL. PP glucose: 248 mg/dL. eGFR: 72 mL/min/1.73m² (mildly reduced). BP: 148/94 mmHg. Microalbuminuria detected.",
+        "status": "reviewed"
+      },
+      {
+        "id": "rep-002-2",
+        "date": "2024-10-14",
+        "type": "Emergency Admission Note",
+        "summary": "Hypoglycemic episode — glucose 42 mg/dL on admission. Recovered with IV dextrose.",
+        "doctor": "Dr. Sanjay Wagh",
+        "hospital": "KEM Hospital",
+        "details": "Patient brought unconscious, GCS 8/15. Blood glucose 42 mg/dL. IV D50 administered, patient recovered in 25 min. Cause: skipped meal after insulin dose. Metformin dose adjusted post-discharge.",
+        "status": "reviewed"
+      }
+    ],
+    "prescriptions": [
+      {
+        "id": "presc-002-1",
+        "date": "2025-04-02",
+        "drug": "Metformin 1g + Glipizide 5mg",
+        "frequency": "Twice daily with meals",
+        "duration": "Ongoing",
+        "doctor": "Dr. Anjali Tiwari",
+        "indication": "Type 2 Diabetes Mellitus"
+      },
+      {
+        "id": "presc-002-2",
+        "date": "2025-04-02",
+        "drug": "Telmisartan 40mg",
+        "frequency": "Once daily morning",
+        "duration": "Ongoing",
+        "doctor": "Dr. Anjali Tiwari",
+        "indication": "Hypertension + Diabetic nephropathy"
+      }
+    ],
+    "testHistory": [
+      { "date": "2025-04-02", "test": "HbA1c", "result": "8.2% — high" },
+      { "date": "2025-04-02", "test": "Urine Microalbumin", "result": "42 mg/g (elevated)" },
+      { "date": "2024-10-14", "test": "Emergency Blood Glucose", "result": "42 mg/dL — critical low" },
+      { "date": "2024-08-10", "test": "Renal Function Test", "result": "Creatinine 1.1 mg/dL" }
+    ]
+  },
+  "u-003": {
+    "reports": [
+      {
+        "id": "rep-003-1",
+        "date": "2025-03-15",
+        "type": "MRI Brain",
+        "summary": "No acute intracranial abnormality. Mild white matter changes noted.",
+        "doctor": "Dr. Priya Sharma",
+        "hospital": "Ruby Hall Clinic",
+        "details": "T2 FLAIR sequences show scattered periventricular white matter hyperintensities consistent with chronic migraine. No mass lesion, midline shift, or hemorrhage detected.",
+        "status": "reviewed"
+      },
+      {
+        "id": "rep-003-2",
+        "date": "2024-11-20",
+        "type": "EEG",
+        "summary": "Borderline EEG. Mild background slowing. No epileptiform discharges.",
+        "doctor": "Dr. Priya Sharma",
+        "hospital": "Ruby Hall Clinic",
+        "details": "Routine EEG: dominant alpha rhythm 9 Hz. Mild background slowing noted in left temporal region. No spike-wave complexes or epileptiform activity. Clinical correlation advised.",
+        "status": "reviewed"
+      },
+      {
+        "id": "rep-003-3",
+        "date": "2024-09-05",
+        "type": "Blood Panel",
+        "summary": "Mild hypertension markers. Lipid profile borderline.",
+        "doctor": "Dr. Priya Sharma",
+        "hospital": "Ruby Hall Clinic",
+        "details": "BP: 134/86 mmHg. Total Cholesterol: 212 mg/dL. LDL: 138 mg/dL. HDL: 48 mg/dL. Triglycerides: 165 mg/dL. Blood Sugar Fasting: 98 mg/dL.",
+        "status": "reviewed"
+      }
+    ],
+    "prescriptions": [
+      {
+        "id": "presc-003-1",
+        "date": "2025-03-15",
+        "drug": "Topiramate 25mg",
+        "frequency": "Once daily at bedtime",
+        "duration": "3 months",
+        "doctor": "Dr. Priya Sharma",
+        "indication": "Migraine prophylaxis"
+      },
+      {
+        "id": "presc-003-2",
+        "date": "2025-03-15",
+        "drug": "Amlodipine 5mg",
+        "frequency": "Once daily",
+        "duration": "Ongoing",
+        "doctor": "Dr. Priya Sharma",
+        "indication": "Mild hypertension"
+      }
+    ],
+    "testHistory": [
+      { "date": "2025-03-15", "test": "MRI Brain (contrast)", "result": "Normal, mild WM changes" },
+      { "date": "2024-11-20", "test": "Routine EEG", "result": "Mild background slowing — borderline" },
+      { "date": "2024-09-05", "test": "Lipid Profile", "result": "Borderline LDL" },
+      { "date": "2024-09-05", "test": "Fasting Blood Sugar", "result": "98 mg/dL (Normal)" }
+    ]
+  }
+}

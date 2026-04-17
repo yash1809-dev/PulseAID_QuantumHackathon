@@ -3,6 +3,8 @@
  *
  * Tabs: Overview | ICU Manager | Doctors | Incoming Patient
  * All state changes flow up to App.jsx via callbacks.
+ *
+ * EXTENDED: Shows HospitalSpecialistBanner when an external doctor is assisting.
  */
 
 import React, { useState } from 'react';
@@ -11,6 +13,7 @@ import ICUManager from './ICUManager';
 import DoctorManager from './DoctorManager';
 import IncomingPatient from './IncomingPatient';
 import AmbulanceFleet from './AmbulanceFleet';
+import HospitalSpecialistBanner from '../Care/HospitalSpecialistBanner';
 import {
   LayoutDashboard, BedDouble, Stethoscope, Ambulance, LogOut,
   TrendingUp, Clock, Shield, Activity
@@ -36,6 +39,8 @@ const HospitalPortal = ({
   onToggleDoctorDay,
   onUpdateAmbulanceDriver,
   onAddAmbulance,
+  // ── Continuity of Care ────────────────────────────────────────────────
+  recommendation = null, // { text, doctorName, timestamp } | null
 }) => {
   const { user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
@@ -100,6 +105,9 @@ const HospitalPortal = ({
         {/* ── Overview ─────────────────────────────────────────────── */}
         {activeTab === 'overview' && (
           <div className="space-y-4 animate-fade-in">
+            {/* Specialist banner — shown when an external doctor is assisting */}
+            <HospitalSpecialistBanner recommendation={recommendation} isDark={isDark} />
+
             {!hospital ? (
               <div className="flex flex-col items-center justify-center py-16">
                 <p className={`text-sm ${textSecondary}`}>Hospital data not found.</p>

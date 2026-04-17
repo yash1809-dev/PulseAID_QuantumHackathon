@@ -1,0 +1,29 @@
+{
+  "u-001": {
+    "heartRate": 110,
+    "spo2": 91,
+    "pulse": 108,
+    "systolic": 162,
+    "diastolic": 101,
+    "temperature": 98.9,
+    "respiratoryRate": 22
+  },
+  "u-002": {
+    "heartRate": 92,
+    "spo2": 94,
+    "pulse": 90,
+    "systolic": 148,
+    "diastolic": 94,
+    "temperature": 99.1,
+    "respiratoryRate": 20
+  },
+  "u-003": {
+    "heartRate": 82,
+    "spo2": 96,
+    "pulse": 80,
+    "systolic": 134,
+    "diastolic": 86,
+    "temperature": 98.6,
+    "respiratoryRate": 17
+  }
+}

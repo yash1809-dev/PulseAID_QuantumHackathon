@@ -1,15 +1,20 @@
 /**
  * DoctorDashboard.jsx — Doctor's personal portal.
+ *
+ * EXTENDED: Emergency tab added. All existing tabs are UNCHANGED.
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { doctorService } from '../services/doctorService';
 import { SPECIALTIES } from '../data/doctors';
 import {
   User, Stethoscope, Calendar, Building2, LogOut, Save,
-  Clock, Plus, X, CheckCircle2, Edit3, MapPin, Star, Award
+  Clock, Plus, X, CheckCircle2, Edit3, MapPin, Star, Award,
+  AlertTriangle
 } from 'lucide-react';
+import { subscribeAlerts, getLatestAlert } from '../services/notificationService';
+import EmergencyDoctorAssist from './EmergencyDoctorAssist';
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -28,11 +33,40 @@ const DoctorDashboard = ({
   const [editMode, setEditMode] = useState(false);
   const [saveFlash, setSaveFlash] = useState(false);
 
-  // Find this doctor's data
+  // Find this doctor's data (must come BEFORE emergency state that references it)
   const doctor = useMemo(
     () => doctorService.getById(doctors, user?.doctorId),
     [doctors, user?.doctorId]
   );
+
+  // ── Emergency alert state ─────────────────────────────────────────────────
+  const [emergencyAlert, setEmergencyAlert] = useState(null);
+
+  // Hydrate from notification store on mount + subscribe to live changes
+  useEffect(() => {
+    if (!doctor) return;
+    // Check for any pre-existing alert (e.g. user was already logged in when dispatch fired)
+    const existing = getLatestAlert(doctor.id);
+    if (existing) setEmergencyAlert(existing);
+
+    const unsub = subscribeAlerts((allAlerts) => {
+      const myAlert = allAlerts.find(a => a.doctorId === doctor.id && a.status !== 'resolved');
+      if (myAlert) {
+        setEmergencyAlert(prev => {
+          const isNew = !prev || prev.id !== myAlert.id;
+          if (isNew) {
+            // Auto-switch to emergency tab after 3 seconds
+            setTimeout(() => setActiveTab('emergency'), 3000);
+          }
+          return myAlert;
+        });
+      } else {
+        setEmergencyAlert(null);
+      }
+    });
+    return unsub;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [doctor?.id]);
 
   // Editable profile state
   const [editName, setEditName] = useState('');
@@ -131,21 +165,32 @@ const DoctorDashboard = ({
       {/* Tab bar */}
       <div className={`${navBg} border-b flex overflow-x-auto scrollbar-hide no-scrollbar`}>
         {[
-          { id: 'profile', label: 'Profile', Icon: User },
-          { id: 'schedule', label: 'Schedule', Icon: Calendar },
+          { id: 'profile',   label: 'Profile',    Icon: User },
+          { id: 'schedule',  label: 'Schedule',   Icon: Calendar },
           { id: 'hospitals', label: 'My Hospitals', Icon: Building2 },
-        ].map(({ id, label, Icon }) => (
+          // Emergency tab — only shown when alert is active
+          ...(emergencyAlert
+            ? [{ id: 'emergency', label: 'Emergency', Icon: AlertTriangle, isAlert: true }]
+            : []
+          ),
+        ].map(({ id, label, Icon, isAlert }) => (
           <button
             key={id}
             onClick={() => setActiveTab(id)}
-            className={`flex items-center gap-2 px-6 py-4 text-[11px] font-black uppercase tracking-widest whitespace-nowrap border-b-2 transition-all
+            className={`flex items-center gap-2 px-5 py-4 text-[11px] font-black uppercase tracking-widest whitespace-nowrap border-b-2 transition-all relative
               ${activeTab === id
-                ? 'border-teal-600 text-teal-600 bg-teal-50/30'
+                ? isAlert
+                  ? 'border-red-500 text-red-600 bg-red-50/30'
+                  : 'border-teal-600 text-teal-600 bg-teal-50/30'
                 : `border-transparent ${isDark ? 'text-slate-400 hover:text-slate-200' : 'text-gray-400 hover:text-gray-600'}`
               }`}
           >
-            <Icon className={`w-3.5 h-3.5 transition-transform ${activeTab === id ? 'scale-110' : 'scale-100'}`} />
+            <Icon className={`w-3.5 h-3.5 transition-transform ${activeTab === id ? 'scale-110' : 'scale-100'} ${isAlert ? 'animate-pulse text-red-500' : ''}`} />
             {label}
+            {/* Red dot badge on Emergency tab */}
+            {isAlert && activeTab !== 'emergency' && (
+              <span className="absolute top-2 right-3 w-2 h-2 bg-red-500 rounded-full animate-pulse border border-white" />
+            )}
           </button>
         ))}
       </div>
@@ -157,8 +202,20 @@ const DoctorDashboard = ({
         </div>
       )}
 
-      {/* Content */}
-      <div className="flex-1 overflow-y-auto px-4 py-5 pb-24">
+      {/* Emergency full-page override */}
+      {activeTab === 'emergency' && emergencyAlert && (
+        <EmergencyDoctorAssist
+          alert={emergencyAlert}
+          doctor={doctor}
+          isDark={isDark}
+          onBack={() => setActiveTab('profile')}
+        />
+      )}
+
+      {/* Content — hidden when emergency tab is active */}
+      <div className={`flex-1 overflow-y-auto px-4 py-5 pb-24 ${
+        activeTab === 'emergency' ? 'hidden' : ''
+      }`}>
 
         <div className="grid grid-cols-3 gap-3 mb-6">
           <MiniStat icon={Building2} value={connectedHospitals} label="Hospitals" color="blue" isDark={isDark} />

@@ -143,49 +143,72 @@ const LoginScreen = () => {
             {role === 'user' ? (
               <>
                 <QuickLoginBtn
-                  label="Login as Patient (Star Health)"
-                  sublabel="Rahul Verma — medium budget, nearest priority"
-                  color="blue"
+                  label="🫀 Anil Kapoor — Cardiac Patient"
+                  sublabel="Primary Doctor: Dr. Arjun Mehta · Triggers Cardiac Emergency Flow"
+                  color="red"
                   onClick={() => quickLogin(DEMO_ACCOUNTS.user)}
                   loading={isLoggingIn}
                 />
                 <QuickLoginBtn
-                  label="Login as Patient (Ayushman Bharat)"
-                  sublabel="Priya Iyer — low budget, cheapest priority"
-                  color="cyan"
+                  label="💉 Priya Iyer — Diabetic Patient"
+                  sublabel="Primary Doctor: Dr. Anjali Tiwari · Triggers Diabetic Emergency Flow"
+                  color="amber"
                   onClick={() => quickLogin(DEMO_ACCOUNTS.user2)}
                   loading={isLoggingIn}
                 />
                 <QuickLoginBtn
-                  label="Login as Patient (ICICI Lombard)"
-                  sublabel="Anil Kapoor — high budget, best doctor priority"
-                  color="purple"
+                  label="🧠 Rohan Desai — Neuro Patient"
+                  sublabel="Primary Doctor: Dr. Priya Sharma · Triggers Neuro Emergency Flow"
+                  color="blue"
                   onClick={() => quickLogin(DEMO_ACCOUNTS.user3)}
                   loading={isLoggingIn}
                 />
               </>
             ) : role === 'hospital' ? (
-              <QuickLoginBtn
-                label="Login as Hospital Admin"
-                sublabel="Ruby Hall Clinic — manage ICU, doctors, incoming patients"
-                color="green"
-                onClick={() => quickLogin(DEMO_ACCOUNTS.hospitalAdmin)}
-                loading={isLoggingIn}
-              />
+              <>
+                <QuickLoginBtn
+                  label="🏥 Ruby Hall Clinic"
+                  sublabel="Receives specialist banner when Anil calls ambulance"
+                  color="green"
+                  onClick={() => quickLogin(DEMO_ACCOUNTS.hospitalAdmin)}
+                  loading={isLoggingIn}
+                />
+                <QuickLoginBtn
+                  label="🏥 KEM Hospital"
+                  sublabel="Receives specialist banner when Priya calls ambulance"
+                  color="cyan"
+                  onClick={() => quickLogin(DEMO_ACCOUNTS.hospitalAdmin2)}
+                  loading={isLoggingIn}
+                />
+                <QuickLoginBtn
+                  label="🏥 Sahyadri Hospital"
+                  sublabel="Receives specialist banner when Rohan calls ambulance"
+                  color="teal"
+                  onClick={() => quickLogin(DEMO_ACCOUNTS.hospitalAdmin3)}
+                  loading={isLoggingIn}
+                />
+              </>
             ) : (
               <>
                 <QuickLoginBtn
-                  label="Login as Dr. Arjun Mehta"
-                  sublabel="Cardiology — 18 yrs exp — Ruby Hall, Jehangir"
+                  label="🩺 Dr. Arjun Mehta — Cardiology"
+                  sublabel="Alerted for Anil Kapoor · Views cardiac reports + live vitals"
                   color="teal"
                   onClick={() => quickLogin(DEMO_ACCOUNTS.doctor)}
                   loading={isLoggingIn}
                 />
                 <QuickLoginBtn
-                  label="Login as Dr. Priya Sharma"
-                  sublabel="Neurology — 14 yrs exp — Ruby Hall, Deenanath"
+                  label="🩺 Dr. Anjali Tiwari — General Medicine"
+                  sublabel="Alerted for Priya Iyer · Views diabetic reports + live vitals"
                   color="purple"
                   onClick={() => quickLogin(DEMO_ACCOUNTS.doctor2)}
+                  loading={isLoggingIn}
+                />
+                <QuickLoginBtn
+                  label="🩺 Dr. Priya Sharma — Neurology"
+                  sublabel="Alerted for Rohan Desai · Views neuro reports + live vitals"
+                  color="blue"
+                  onClick={() => quickLogin(DEMO_ACCOUNTS.doctor3)}
                   loading={isLoggingIn}
                 />
               </>
@@ -209,6 +232,8 @@ const colorMap = {
   purple: 'border-purple-500/30 hover:border-purple-500/60 hover:bg-purple-500/10',
   green:  'border-green-500/30 hover:border-green-500/60 hover:bg-green-500/10',
   teal:   'border-teal-500/30 hover:border-teal-500/60 hover:bg-teal-500/10',
+  amber:  'border-amber-500/30 hover:border-amber-500/60 hover:bg-amber-500/10',
+  red:    'border-red-500/30 hover:border-red-500/60 hover:bg-red-500/10',
 };
 
 const QuickLoginBtn = ({ label, sublabel, color, onClick, loading }) => (

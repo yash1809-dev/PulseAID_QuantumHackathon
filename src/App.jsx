@@ -40,6 +40,10 @@ import GovtSchemes from './components/Govt/GovtSchemes';
 import { hospitalService } from './services/hospitalService';
 import { doctorService } from './services/doctorService';
 import useMatchingEngine from './hooks/useMatchingEngine';
+// ── Continuity of Care imports ──────────────────────────────────────────────────────
+import careService from './services/careService';
+import { recommendationsStore } from './services/syncService';
+import UserDoctorNotice from './components/Care/UserDoctorNotice';
 
 function App() {
   // ── Existing state (ALL UNCHANGED) ───────────────────────────────────────
@@ -62,6 +66,27 @@ function App() {
   const [insurance, setInsurance] = useState(user?.insurance || 'none');
   const [budget, setBudget] = useState(user?.budget || null);
   const [priority, setPriority] = useState(user?.priority || 'nearest');
+
+  // ── Continuity of Care state (SYNCED across tabs/devices) ───────────────────
+  // recommendation: { text, doctorName, timestamp } | null
+  const [recommendation, setRecommendation] = useState(
+    () => user?.id ? careService.getRecommendation(user.id) : null
+  );
+
+  // Subscribe to recommendationsStore for instant cross-tab sync
+  useEffect(() => {
+    if (!user?.id) return;
+    // Hydrate on mount
+    const rec = careService.getRecommendation(user.id);
+    if (rec) setRecommendation(rec);
+
+    // Reactive subscription — fires on any tab/device that writes a recommendation
+    const unsub = recommendationsStore.subscribe((allRecs) => {
+      const mine = allRecs?.[user.id] || null;
+      setRecommendation(mine);
+    });
+    return unsub;
+  }, [user?.id]);
 
   // Sync user prefs to filter state when user logs in
   useEffect(() => {
@@ -185,6 +210,17 @@ function App() {
         eta: formatETA(totalDistKm),
         distance: formatDistance(totalDistKm),
       }));
+
+      // ── Trigger Continuity of Care flow ──────────────────────────────────────
+      if (user?.primaryDoctorId) {
+        careService.triggerEmergencyFlow(
+          user,
+          targetHospital,
+          nearestAmb,
+          formatETA(totalDistKm)
+        );
+      }
+      // ─────────────────────────────────────────────────────────────────────
 
       let idx = 0;
       const totalSteps = coords.length;
@@ -370,6 +406,7 @@ function App() {
           onToggleDoctorDay={handleToggleDoctorDay}
           onUpdateAmbulanceDriver={handleUpdateAmbulanceDriver}
           onAddAmbulance={handleAddAmbulance}
+          recommendation={recommendation}
         />
       </>
     );
@@ -425,6 +462,24 @@ function App() {
                   request={activeRequest}
                   ambulances={ambulances}
                   onDismiss={handleDismissRequest}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* ── UserDoctorNotice ────────────────────────────────────────────── */}
+          {activeRequest && user?.primaryDoctorId && (
+            <div style={{ position: 'absolute', bottom: '220px', left: 0, right: 0, zIndex: 20, pointerEvents: 'none' }}>
+              <div style={{ pointerEvents: 'auto' }}>
+                <UserDoctorNotice
+                  doctorName={
+                    doctors.find(d => d.id === user.primaryDoctorId)?.name
+                  }
+                  specialty={
+                    doctors.find(d => d.id === user.primaryDoctorId)?.specialty
+                  }
+                  recommendation={recommendation}
+                  isDark={isDark}
                 />
               </div>
             </div>
