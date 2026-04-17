@@ -1,0 +1,68 @@
+[
+  {
+    "id": "doc-001",
+    "name": "Dr. Arjun Mehta",
+    "specialty": "Cardiology",
+    "qualification": "MD, DM (Cardiology) — AIIMS Delhi",
+    "experience": 18,
+    "rating": 4.8,
+    "avatar": "https://api.dicebear.com/7.x/personas/svg?seed=ArjunMehta",
+    "bio": "Senior interventional cardiologist with 18 years in advanced cardiac procedures.",
+    "schedule": {
+      "Monday": [
+        { "hospitalId": "hosp-001", "time": "09:00 AM - 12:00 PM" },
+        { "hospitalId": "hosp-004", "time": "01:00 PM - 05:00 PM" }
+      ],
+      "Tuesday": [],
+      "Wednesday": [{ "hospitalId": "hosp-001", "time": "09:00 AM - 02:00 PM" }],
+      "Thursday": [],
+      "Friday": [{ "hospitalId": "hosp-004", "time": "10:00 AM - 04:00 PM" }],
+      "Saturday": [],
+      "Sunday": []
+    }
+  },
+  {
+    "id": "doc-002",
+    "name": "Dr. Priya Sharma",
+    "specialty": "Neurology",
+    "qualification": "MD, DM (Neurology) — PGI Chandigarh",
+    "experience": 14,
+    "rating": 4.7,
+    "avatar": "https://api.dicebear.com/7.x/personas/svg?seed=PriyaSharma",
+    "bio": "Specialist in stroke management and epilepsy treatment.",
+    "schedule": {
+      "Monday": [],
+      "Tuesday": [
+        { "hospitalId": "hosp-001", "time": "10:00 AM - 01:00 PM" },
+        { "hospitalId": "hosp-002", "time": "02:00 PM - 06:00 PM" }
+      ],
+      "Wednesday": [],
+      "Thursday": [{ "hospitalId": "hosp-002", "time": "10:00 AM - 04:00 PM" }],
+      "Friday": [],
+      "Saturday": [{ "hospitalId": "hosp-001", "time": "09:00 AM - 01:00 PM" }],
+      "Sunday": []
+    }
+  },
+  {
+    "id": "doc-003",
+    "name": "Dr. Rajesh Kulkarni",
+    "specialty": "Orthopedics",
+    "qualification": "MS (Ortho), Fellowship in Joint Replacement",
+    "experience": 22,
+    "rating": 4.6,
+    "avatar": "https://api.dicebear.com/7.x/personas/svg?seed=RajeshKulkarni",
+    "bio": "Expert in knee and hip replacement surgeries, sports injuries.",
+    "schedule": {
+      "Monday": [
+        { "hospitalId": "hosp-003", "time": "08:00 AM - 12:00 PM" },
+        { "hospitalId": "hosp-006", "time": "02:00 PM - 06:00 PM" }
+      ],
+      "Tuesday": [{ "hospitalId": "hosp-003", "time": "09:00 AM - 01:00 PM" }],
+      "Wednesday": [],
+      "Thursday": [{ "hospitalId": "hosp-006", "time": "10:00 AM - 04:00 PM" }],
+      "Friday": [],
+      "Saturday": [],
+      "Sunday": []
+    }
+  }
+]

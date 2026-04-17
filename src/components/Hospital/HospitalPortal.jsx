@@ -34,6 +34,8 @@ const HospitalPortal = ({
   onUpdateCostLevel,
   onToggleInsurance,
   onToggleDoctorDay,
+  onUpdateAmbulanceDriver,
+  onAddAmbulance,
 }) => {
   const { user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
@@ -69,7 +71,7 @@ const HospitalPortal = ({
       </div>
 
       {/* Tab Bar */}
-      <div className={`${navBg} border-b flex overflow-x-auto`}>
+      <div className={`${navBg} border-b flex overflow-x-auto scrollbar-hide no-scrollbar`}>
         {TABS.map(({ id, label, Icon }) => {
           const isActive = activeTab === id;
           const showDot = id === 'incoming' && activeRequest?.hospitalId === user?.hospitalId && activeRequest?.status !== 'arrived';
@@ -77,16 +79,16 @@ const HospitalPortal = ({
             <button
               key={id}
               onClick={() => setActiveTab(id)}
-              className={`flex items-center gap-2 px-5 py-3.5 text-xs font-bold whitespace-nowrap border-b-2 transition-all relative
+              className={`flex items-center gap-2 px-6 py-4 text-[11px] font-black uppercase tracking-widest whitespace-nowrap border-b-2 transition-all relative
                 ${isActive
-                  ? 'border-blue-600 text-blue-600'
+                  ? 'border-blue-600 text-blue-600 bg-blue-50/30'
                   : `border-transparent ${isDark ? 'text-slate-400 hover:text-slate-200' : 'text-gray-400 hover:text-gray-600'}`
                 }`}
             >
-              <Icon className="w-3.5 h-3.5" />
+              <Icon className={`w-4 h-4 transition-transform ${isActive ? 'scale-110' : 'scale-100'}`} />
               {label}
               {showDot && (
-                <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                <span className="absolute top-2 right-4 w-2 h-2 bg-red-500 rounded-full animate-pulse border-2 border-white" />
               )}
             </button>
           );
@@ -192,6 +194,8 @@ const HospitalPortal = ({
               activeRequest={activeRequest}
               hospitalId={hospital?.id}
               isDark={isDark}
+              onUpdateDriver={onUpdateAmbulanceDriver}
+              onAddAmbulance={onAddAmbulance}
             />
           </div>
         )}

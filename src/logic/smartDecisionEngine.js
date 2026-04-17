@@ -383,7 +383,6 @@ function generateNarrativeReasoning(best, breakdown, user, priority) {
 
   // Lead with the strongest match dimension
   const dims = Object.entries(breakdown).sort((a, b) => b[1].score - a[1].score);
-  const topDim = dims[0];
 
   if (breakdown.preference.score >= 85) {
     reasons.push(breakdown.preference.detail);
@@ -403,6 +402,11 @@ function generateNarrativeReasoning(best, breakdown, user, priority) {
   }
 
   if (reasons.length === 0) reasons.push(breakdown.availability.detail);
+
+  // Requirement: Explicit tagline for specific match types
+  if (breakdown.coverage.score >= 80 && breakdown.availability.score >= 70) {
+    reasons.unshift("Recommended based on your insurance and doctor availability");
+  }
 
   return reasons;
 }

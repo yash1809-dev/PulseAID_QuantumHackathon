@@ -128,6 +128,35 @@ export const mockUsers = [
     hospitalId: 'hosp-003',
     avatar: 'https://api.dicebear.com/7.x/shapes/svg?seed=Sahyadri',
   },
+
+  // ── Doctor accounts ─────────────────────────────────────────────────
+  {
+    id: 'd-001',
+    name: 'Dr. Arjun Mehta',
+    email: 'arjun@demo.com',
+    password: 'demo123',
+    user_type: 'doctor',
+    doctorId: 'doc-001',
+    avatar: 'https://api.dicebear.com/7.x/personas/svg?seed=ArjunMehta',
+  },
+  {
+    id: 'd-002',
+    name: 'Dr. Priya Sharma',
+    email: 'priyasharma@demo.com',
+    password: 'demo123',
+    user_type: 'doctor',
+    doctorId: 'doc-002',
+    avatar: 'https://api.dicebear.com/7.x/personas/svg?seed=PriyaSharma',
+  },
+  {
+    id: 'd-003',
+    name: 'Dr. Rajesh Kulkarni',
+    email: 'rajesh@demo.com',
+    password: 'demo123',
+    user_type: 'doctor',
+    doctorId: 'doc-003',
+    avatar: 'https://api.dicebear.com/7.x/personas/svg?seed=RajeshKulkarni',
+  },
 ];
 
 // ── Demo quick-login shortcuts ────────────────────────────────────────────────
@@ -136,4 +165,6 @@ export const DEMO_ACCOUNTS = {
   user2: mockUsers[1],      // Priya Iyer — Ayushman Bharat, low budget
   user3: mockUsers[2],      // Anil Kapoor — ICICI Lombard, high budget
   hospitalAdmin: mockUsers[3], // Ruby Hall Clinic admin
+  doctor: mockUsers[6],     // Dr. Arjun Mehta — Cardiology
+  doctor2: mockUsers[7],    // Dr. Priya Sharma — Neurology
 };

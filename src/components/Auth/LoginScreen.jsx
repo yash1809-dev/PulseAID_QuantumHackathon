@@ -12,7 +12,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { DEMO_ACCOUNTS } from '../../data/users';
-import { Heart, Building2, User, Zap, AlertCircle, ArrowRight } from 'lucide-react';
+import { Heart, Building2, User, Zap, AlertCircle, ArrowRight, Stethoscope } from 'lucide-react';
 
 const LoginScreen = () => {
   const { login, quickLogin, isLoggingIn, loginError } = useAuth();
@@ -76,6 +76,18 @@ const LoginScreen = () => {
             >
               <Building2 className="w-4 h-4" />
               Hospital
+            </button>
+            <button
+              type="button"
+              onClick={() => setRole('doctor')}
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 ${
+                role === 'doctor'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <Stethoscope className="w-4 h-4" />
+              Doctor
             </button>
           </div>
 
@@ -152,7 +164,7 @@ const LoginScreen = () => {
                   loading={isLoggingIn}
                 />
               </>
-            ) : (
+            ) : role === 'hospital' ? (
               <QuickLoginBtn
                 label="Login as Hospital Admin"
                 sublabel="Ruby Hall Clinic — manage ICU, doctors, incoming patients"
@@ -160,6 +172,23 @@ const LoginScreen = () => {
                 onClick={() => quickLogin(DEMO_ACCOUNTS.hospitalAdmin)}
                 loading={isLoggingIn}
               />
+            ) : (
+              <>
+                <QuickLoginBtn
+                  label="Login as Dr. Arjun Mehta"
+                  sublabel="Cardiology — 18 yrs exp — Ruby Hall, Jehangir"
+                  color="teal"
+                  onClick={() => quickLogin(DEMO_ACCOUNTS.doctor)}
+                  loading={isLoggingIn}
+                />
+                <QuickLoginBtn
+                  label="Login as Dr. Priya Sharma"
+                  sublabel="Neurology — 14 yrs exp — Ruby Hall, Deenanath"
+                  color="purple"
+                  onClick={() => quickLogin(DEMO_ACCOUNTS.doctor2)}
+                  loading={isLoggingIn}
+                />
+              </>
             )}
           </div>
         </div>
@@ -179,6 +208,7 @@ const colorMap = {
   cyan:   'border-cyan-500/30 hover:border-cyan-500/60 hover:bg-cyan-500/10',
   purple: 'border-purple-500/30 hover:border-purple-500/60 hover:bg-purple-500/10',
   green:  'border-green-500/30 hover:border-green-500/60 hover:bg-green-500/10',
+  teal:   'border-teal-500/30 hover:border-teal-500/60 hover:bg-teal-500/10',
 };
 
 const QuickLoginBtn = ({ label, sublabel, color, onClick, loading }) => (

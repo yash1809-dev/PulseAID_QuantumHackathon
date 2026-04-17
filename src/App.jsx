@@ -11,6 +11,10 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 
+// ── Dev Configuration ───────────────────────────────────────────────────────
+const DEV_MODE = true; 
+
+
 // ── Existing imports (UNCHANGED) ─────────────────────────────────────────────
 import MapContainer from './components/Map/MapContainer';
 import RequestTracker from './components/UI/RequestTracker';
@@ -25,6 +29,7 @@ import { findNearestAmbulance, findNearestHospital, getDistanceKm, formatDistanc
 import { useAuth } from './contexts/AuthContext';
 import LoginScreen from './components/Auth/LoginScreen';
 import HospitalPortal from './components/Hospital/HospitalPortal';
+import DoctorDashboard from './pages/DoctorDashboard';
 import BottomSheet from './components/UI/BottomSheet';
 import BottomNavbar from './components/UI/BottomNavbar';
 import DoctorSearch from './components/Doctors/DoctorSearch';
@@ -300,6 +305,46 @@ function App() {
     setHospitals(prev => hospitalService.updateICU(prev, hospitalId, count));
   }, []);
 
+  // ── Doctor Handlers ───────────────────────────────────────────────────────
+  const handleUpdateDoctorProfile = useCallback((doctorId, updates) => {
+    setDoctors(prev => doctorService.updateProfile(prev, doctorId, updates));
+  }, []);
+
+  const handleAddDoctorSlot = useCallback((doctorId, day, slot) => {
+    setDoctors(prev => doctorService.addSlot(prev, doctorId, day, slot));
+  }, []);
+
+  const handleRemoveDoctorSlot = useCallback((doctorId, day, index) => {
+    setDoctors(prev => doctorService.removeSlot(prev, doctorId, day, index));
+  }, []);
+
+  const handleUpdateAmbulanceDriver = useCallback((ambId, updates) => {
+    setAmbulances(prev => prev.map(a => a.id === ambId ? { ...a, ...updates } : a));
+  }, []);
+
+  const handleAddAmbulance = useCallback((newAmb) => {
+    setAmbulances(prev => [
+      ...prev,
+      {
+        ...newAmb,
+        id: `amb-new-${Date.now()}`,
+        status: 'available',
+        lat: 18.5204, // Default center or hospital near lat
+        lng: 73.8567,
+        speed: 40,
+        driverPhoto: `https://api.dicebear.com/7.x/personas/svg?seed=${newAmb.driverName}`
+      }
+    ]);
+  }, []);
+
+  const handleLinkHospital = useCallback((doctorId, hospitalId) => {
+    setDoctors(prev => doctorService.linkHospital(prev, doctorId, hospitalId));
+  }, []);
+
+  const handleUnlinkHospital = useCallback((doctorId, hospitalId) => {
+    setDoctors(prev => doctorService.unlinkHospital(prev, doctorId, hospitalId));
+  }, []);
+
   // ── Map style (UNCHANGED) ─────────────────────────────────────────────────
   const mapStyle = isDark
     ? 'mapbox://styles/mapbox/dark-v11'
@@ -322,15 +367,35 @@ function App() {
           onUpdateCostLevel={handleUpdateCostLevel}
           onToggleInsurance={handleToggleInsurance}
           onToggleDoctorDay={handleToggleDoctorDay}
+          onUpdateAmbulanceDriver={handleUpdateAmbulanceDriver}
+          onAddAmbulance={handleAddAmbulance}
         />
-        <DemoControl
-          hospitals={hospitals}
-          onSetAllICUFull={handleSetAllICUFull}
-          onSetAllICUAvailable={handleSetAllICUAvailable}
-          onSetHospitalICU={handleSetHospitalICU}
-          isDark={isDark}
-        />
+        {DEV_MODE && (
+          <DemoControl
+            hospitals={hospitals}
+            onSetAllICUFull={handleSetAllICUFull}
+            onSetAllICUAvailable={handleSetAllICUAvailable}
+            onSetHospitalICU={handleSetHospitalICU}
+            isDark={isDark}
+          />
+        )}
       </>
+    );
+  }
+
+  // ── Doctor Dashboard ──────────────────────────────────────────────────────
+  if (role === 'doctor') {
+    return (
+      <DoctorDashboard
+        doctors={doctors}
+        hospitals={hospitals}
+        isDark={isDark}
+        onUpdateProfile={handleUpdateDoctorProfile}
+        onAddSlot={handleAddDoctorSlot}
+        onRemoveSlot={handleRemoveDoctorSlot}
+        onLinkHospital={handleLinkHospital}
+        onUnlinkHospital={handleUnlinkHospital}
+      />
     );
   }
 
@@ -363,19 +428,29 @@ function App() {
           {/* Dark mode toggle (UNCHANGED) */}
           <DarkModeToggle isDark={isDark} onToggle={() => setIsDark((d) => !d)} />
 
-          {/* Request Tracker (UNCHANGED) */}
+          {/* Request Tracker (floats above status bar) */}
           {activeRequest && (
-            <RequestTracker request={activeRequest} onDismiss={handleDismissRequest} />
+            <div style={{ position: 'absolute', bottom: '260px', left: 0, right: 0, display: 'flex', justifyContent: 'center', pointerEvents: 'none' }}>
+              <div style={{ width: '100%', maxWidth: '380px', pointerEvents: 'auto' }}>
+                <RequestTracker
+                  request={activeRequest}
+                  ambulances={ambulances}
+                  onDismiss={handleDismissRequest}
+                />
+              </div>
+            </div>
           )}
 
-          {/* Status Bar (new — floats above bottom sheet) */}
-          <div style={{ position: 'absolute', bottom: '136px', left: 0, right: 0, display: 'flex', justifyContent: 'center' }}>
-            <StatusBar
-              activeRequest={activeRequest}
-              bestMatch={bestMatch}
-              isSearching={isProcessing}
-              isDark={isDark}
-            />
+          {/* Status Bar (floats above collapsed sheet handle area) */}
+          <div style={{ position: 'absolute', bottom: '200px', left: 0, right: 0, display: 'flex', justifyContent: 'center', pointerEvents: 'none' }}>
+            <div style={{ pointerEvents: 'auto' }}>
+              <StatusBar
+                activeRequest={activeRequest}
+                bestMatch={bestMatch}
+                isSearching={isProcessing}
+                isDark={isDark}
+              />
+            </div>
           </div>
         </div>
       )}

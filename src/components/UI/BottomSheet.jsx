@@ -141,23 +141,26 @@ const BottomSheet = ({
             </div>
           ) : displayHospital ? (
             <>
-              <div>
-                <p className={`text-[10px] font-bold uppercase tracking-wide text-blue-600 mb-0.5`}>
-                  {selectedHospital ? 'Manually Selected' : 'Best Match Found'}
+              <div className="flex-1 min-w-0 pr-2">
+                <p className="text-[9px] font-black uppercase tracking-widest text-blue-600 mb-0.5 leading-none">
+                  {selectedHospital ? 'Active Selection' : 'AI Best Match'}
                 </p>
-                <p className={`text-sm font-extrabold truncate ${textPrimary}`}>{displayHospital.name}</p>
+                <p className={`text-base font-black truncate leading-tight ${textPrimary}`}>
+                  {displayHospital.name}
+                </p>
                 {userLocation && displayHospital._distanceKm !== undefined && (
-                  <p className={`text-xs flex items-center gap-1 mt-0.5 ${textSecondary}`}>
-                    <MapPin className="w-3 h-3" />{displayHospital._distanceKm} km away
-                  </p>
+                  <div className={`flex items-center gap-1 mt-0.5 ${textSecondary}`}>
+                    <MapPin className="w-2.5 h-2.5" />
+                    <span className="text-[10px] font-bold">{displayHospital._distanceKm} km away</span>
+                  </div>
                 )}
               </div>
               <button
                 onClick={onCallAmbulance}
                 disabled={activeRequest && activeRequest.status !== 'arrived'}
-                className="ml-3 shrink-0 px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold shadow-sm hover:bg-blue-700 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="shrink-0 px-5 py-2.5 rounded-xl bg-blue-600 text-white text-[11px] font-black uppercase tracking-wider shadow-lg shadow-blue-500/30 hover:bg-blue-700 transition-all active:scale-90 disabled:opacity-50 disabled:grayscale"
               >
-                🚑 Dispatch
+                Dispatch
               </button>
             </>
           ) : (

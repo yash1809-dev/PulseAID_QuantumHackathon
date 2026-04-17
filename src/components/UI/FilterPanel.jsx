@@ -41,31 +41,15 @@ const FilterPanel = ({
     <div className="space-y-3 px-4 py-3">
       {/* Insurance */}
       <div>
-        <div className={`flex items-center gap-1.5 mb-2 text-xs font-bold uppercase tracking-wider ${rowLabel}`}>
-          <Shield className="w-3 h-3" />
-          Insurance
         </div>
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
           <button
             onClick={() => setInsurance('none')}
             className={chip(insurance === 'none' || !insurance, 'blue')}
           >
             None
           </button>
-          {INSURANCE_OPTIONS.slice(0, 5).map(ins => (
-            <button
-              key={ins}
-              onClick={() => setInsurance(insurance === ins ? 'none' : ins)}
-              className={chip(insurance === ins, 'blue')}
-            >
-              {ins}
-            </button>
-          ))}
-          {/* Show remaining in a submenu only if there are more */}
-        </div>
-        {/* Second row of insurance options */}
-        <div className="flex gap-2 flex-wrap mt-1.5">
-          {INSURANCE_OPTIONS.slice(5).map(ins => (
+          {INSURANCE_OPTIONS.map(ins => (
             <button
               key={ins}
               onClick={() => setInsurance(insurance === ins ? 'none' : ins)}
@@ -79,11 +63,11 @@ const FilterPanel = ({
 
       {/* Budget */}
       <div>
-        <div className={`flex items-center gap-1.5 mb-2 text-xs font-bold uppercase tracking-wider ${rowLabel}`}>
-          <DollarSign className="w-3 h-3" />
-          Budget
+        <div className={`flex items-center gap-1.5 mb-2 text-[10px] font-black uppercase tracking-widest ${rowLabel}`}>
+          <DollarSign className="w-3 h-3 text-green-500" />
+          Budget Range
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
           <button
             onClick={() => setBudget(null)}
             className={chip(!budget, 'green')}
@@ -104,11 +88,11 @@ const FilterPanel = ({
 
       {/* Priority */}
       <div>
-        <div className={`flex items-center gap-1.5 mb-2 text-xs font-bold uppercase tracking-wider ${rowLabel}`}>
-          <Target className="w-3 h-3" />
-          Priority
+        <div className={`flex items-center gap-1.5 mb-2 text-[10px] font-black uppercase tracking-widest ${rowLabel}`}>
+          <Target className="w-3 h-3 text-purple-500" />
+          Sort Priority
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
           {PRIORITY_OPTIONS.map(opt => (
             <button
               key={opt.value}
