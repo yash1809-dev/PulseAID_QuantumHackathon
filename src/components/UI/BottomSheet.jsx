@@ -134,12 +134,7 @@ const BottomSheet = ({
       {/* ── Collapsed Summary ────────────────────────────────────────── */}
       {sheetHeight <= snapCollapsed + 20 && (
         <div className="px-5 pb-2 flex items-center justify-between">
-          {isProcessing ? (
-            <div className="flex items-center gap-2">
-              <Loader2 className="w-4 h-4 text-blue-500 animate-spin" />
-              <span className={`text-sm font-medium ${textSecondary}`}>Finding best hospital...</span>
-            </div>
-          ) : displayHospital ? (
+          {isProcessing ? null : displayHospital ? (
             <>
               <div className="flex-1 min-w-0 pr-2">
                 <p className="text-[9px] font-black uppercase tracking-widest text-blue-600 mb-0.5 leading-none">

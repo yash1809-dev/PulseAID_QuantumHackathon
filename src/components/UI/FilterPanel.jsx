@@ -41,6 +41,9 @@ const FilterPanel = ({
     <div className="space-y-3 px-4 py-3">
       {/* Insurance */}
       <div>
+        <div className={`flex items-center gap-1.5 mb-2 text-[10px] font-black uppercase tracking-widest ${rowLabel}`}>
+          <Shield className="w-3 h-3 text-blue-500" />
+          Insurance Coverage
         </div>
         <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
           <button

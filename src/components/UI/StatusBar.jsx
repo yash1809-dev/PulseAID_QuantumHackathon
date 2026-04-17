@@ -32,13 +32,6 @@ const StatusBar = ({ activeRequest, bestMatch, isSearching, isDark = false }) =>
       };
     } else if (activeRequest?.status === 'pending') {
       m = STATUS_MESSAGES.pending;
-    } else if (isSearching) {
-      m = STATUS_MESSAGES.searching;
-    } else if (bestMatch) {
-      m = {
-        ...STATUS_MESSAGES.matched,
-        text: `🏥 Best match: ${bestMatch.name}`,
-      };
     }
 
     if (m) {

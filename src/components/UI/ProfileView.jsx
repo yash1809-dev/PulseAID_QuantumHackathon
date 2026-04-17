@@ -6,8 +6,10 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { LogOut, User, Shield, DollarSign, Target, Activity, FileText, Building2, Stethoscope, CheckSquare, Square } from 'lucide-react';
+import { LogOut, User, Shield, Target, Activity, FileText, Building2, Stethoscope, Moon, Sun, Settings2, Beaker } from 'lucide-react';
 import { INSURANCE_OPTIONS } from '../../data/hospitals';
+import DarkModeToggle from './DarkModeToggle';
+import DemoControl from './DemoControl';
 
 const PrefRow = ({ label, icon: Icon, value, options, onChange, placeholder, isDark }) => {
   const textPrimary = isDark ? 'text-white' : 'text-gray-800';
@@ -33,7 +35,13 @@ const PrefRow = ({ label, icon: Icon, value, options, onChange, placeholder, isD
   );
 };
 
-const ProfileView = ({ isDark = false, govtSchemes = [], hospitals = [], doctors = [] }) => {
+const ProfileView = ({ 
+  isDark = false, 
+  hospitals = [], 
+  doctors = [], 
+  onToggleDark,
+  demoProps = {} 
+}) => {
   const { user, updateUserPrefs, logout } = useAuth();
   const [conditions, setConditions] = useState(user?.medicalConditions || '');
   
@@ -98,12 +106,12 @@ const ProfileView = ({ isDark = false, govtSchemes = [], hospitals = [], doctors
           </div>
         </section>
 
-        {/* Insurance & Govt Schemes Section */}
+        {/* Insurance Section */}
         <section>
           <p className={`text-xs font-bold uppercase tracking-widest ${textSecondary} mb-2 px-1 flex items-center gap-2`}>
             <Shield className="w-3.5 h-3.5" /> Healthcare Coverage
           </p>
-          <div className={`rounded-2xl border overflow-hidden mb-3 ${card}`}>
+          <div className={`rounded-2xl border overflow-hidden ${card}`}>
             <PrefRow
               label="Private Insurance"
               icon={FileText}
@@ -116,37 +124,6 @@ const ProfileView = ({ isDark = false, govtSchemes = [], hospitals = [], doctors
               placeholder="No Insurance"
               isDark={isDark}
             />
-          </div>
-
-          <div className={`rounded-2xl border p-4 ${card}`}>
-            <label className={`text-sm font-medium ${textPrimary} mb-3 block`}>Government Schemes (Open API)</label>
-            <div className="space-y-3">
-              {govtSchemes.length === 0 ? (
-                 <p className={`text-xs ${textSecondary}`}>Loading available schemes...</p>
-              ) : (
-                govtSchemes.map(scheme => {
-                  const isEnrolled = (user.enrolledSchemes || []).includes(scheme.name);
-                  return (
-                    <div 
-                      key={scheme.id} 
-                      onClick={() => handleToggleScheme(scheme.name)}
-                      className={`flex items-start gap-3 p-3 rounded-xl border transition-all cursor-pointer select-none active:scale-[0.98]
-                        ${isEnrolled 
-                          ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20' 
-                          : isDark ? 'border-slate-700 hover:border-slate-600' : 'border-gray-100 hover:border-gray-200'}`}
-                    >
-                      <div className="mt-0.5">
-                        {isEnrolled ? <CheckSquare className="w-5 h-5 text-blue-600" /> : <Square className={`w-5 h-5 ${isDark ? 'text-slate-500' : 'text-gray-300'}`} />}
-                      </div>
-                      <div className="flex-1">
-                        <p className={`text-sm font-bold ${isEnrolled ? 'text-blue-700 dark:text-blue-400' : textPrimary}`}>{scheme.name}</p>
-                        <p className={`text-[10px] mt-0.5 ${textSecondary}`}>{scheme.description}</p>
-                      </div>
-                    </div>
-                  );
-                })
-              )}
-            </div>
           </div>
         </section>
 
@@ -175,18 +152,6 @@ const ProfileView = ({ isDark = false, govtSchemes = [], hospitals = [], doctors
               isDark={isDark}
             />
             <PrefRow
-              label="Budget Segment"
-              icon={DollarSign}
-              value={user.budget || 'medium'}
-              options={[
-                { value: 'low', label: '₹ Low Budget' },
-                { value: 'medium', label: '₹₹ Medium' },
-                { value: 'high', label: '₹₹₹ Premium' },
-              ]}
-              onChange={val => updateUserPrefs({ budget: val })}
-              isDark={isDark}
-            />
-            <PrefRow
               label="Matching Priority"
               icon={Target}
               value={user.priority || 'nearest'}
@@ -198,6 +163,41 @@ const ProfileView = ({ isDark = false, govtSchemes = [], hospitals = [], doctors
               onChange={val => updateUserPrefs({ priority: val })}
               isDark={isDark}
             />
+          </div>
+        </section>
+
+        {/* System Settings Section */}
+        <section>
+          <p className={`text-xs font-bold uppercase tracking-widest ${textSecondary} mb-2 px-1 flex items-center gap-2`}>
+            <Settings2 className="w-3.5 h-3.5" /> App Settings
+          </p>
+          <div className={`rounded-2xl border divide-y overflow-hidden ${card}`}>
+            <div className={`flex items-center justify-between px-4 py-3.5 ${isDark ? 'divide-slate-700' : 'divide-gray-50'}`}>
+              <div className="flex items-center gap-3">
+                <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${isDark ? 'bg-slate-700' : 'bg-blue-50'}`}>
+                  {isDark ? <Moon className="w-4 h-4 text-blue-400" /> : <Sun className="w-4 h-4 text-orange-500" />}
+                </div>
+                <span className={`text-sm font-medium ${textPrimary}`}>Dark Mode</span>
+              </div>
+              <button 
+                onClick={onToggleDark}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none 
+                  ${isDark ? 'bg-blue-600' : 'bg-gray-200'}`}
+              >
+                <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${isDark ? 'translate-x-6' : 'translate-x-1'}`} />
+              </button>
+            </div>
+            
+            {/* Demo Control integrated here */}
+            <div className="p-4 bg-slate-50/50 dark:bg-slate-900/20">
+              <div className="flex items-center gap-2 mb-4">
+                <Beaker className="w-4 h-4 text-purple-500" />
+                <span className={`text-xs font-bold uppercase tracking-widest ${textSecondary}`}>Simulation Tools</span>
+              </div>
+              <div className="scale-90 -ml-4 -mt-2">
+                <DemoControl {...demoProps} isDark={isDark} />
+              </div>
+            </div>
           </div>
         </section>
 

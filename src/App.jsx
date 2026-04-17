@@ -36,6 +36,7 @@ import DoctorSearch from './components/Doctors/DoctorSearch';
 import ProfileView from './components/UI/ProfileView';
 import StatusBar from './components/UI/StatusBar';
 import DemoControl from './components/UI/DemoControl';
+import GovtSchemes from './components/Govt/GovtSchemes';
 import { hospitalService } from './services/hospitalService';
 import { doctorService } from './services/doctorService';
 import useMatchingEngine from './hooks/useMatchingEngine';
@@ -370,15 +371,6 @@ function App() {
           onUpdateAmbulanceDriver={handleUpdateAmbulanceDriver}
           onAddAmbulance={handleAddAmbulance}
         />
-        {DEV_MODE && (
-          <DemoControl
-            hospitals={hospitals}
-            onSetAllICUFull={handleSetAllICUFull}
-            onSetAllICUAvailable={handleSetAllICUAvailable}
-            onSetHospitalICU={handleSetHospitalICU}
-            isDark={isDark}
-          />
-        )}
       </>
     );
   }
@@ -425,9 +417,6 @@ function App() {
             onHospitalSelect={setSelectedHospital}
           />
 
-          {/* Dark mode toggle (UNCHANGED) */}
-          <DarkModeToggle isDark={isDark} onToggle={() => setIsDark((d) => !d)} />
-
           {/* Request Tracker (floats above status bar) */}
           {activeRequest && (
             <div style={{ position: 'absolute', bottom: '260px', left: 0, right: 0, display: 'flex', justifyContent: 'center', pointerEvents: 'none' }}>
@@ -472,11 +461,24 @@ function App() {
         <div style={{ position: 'absolute', inset: 0, bottom: '64px', overflow: 'hidden' }}>
           <ProfileView 
             isDark={isDark} 
-            govtSchemes={govtSchemes} 
             hospitals={hospitals} 
             doctors={doctors}
             onNavigateMap={() => setActiveTab('map')}
+            onToggleDark={() => setIsDark(d => !d)}
+            demoProps={{
+              hospitals,
+              onSetAllICUFull: handleSetAllICUFull,
+              onSetAllICUAvailable: handleSetAllICUAvailable,
+              onSetHospitalICU: handleSetHospitalICU
+            }}
           />
+        </div>
+      )}
+
+      {/* ── Govt Schemes tab ──────────────────────────────────────────────── */}
+      {activeTab === 'schemes' && (
+        <div style={{ position: 'absolute', inset: 0, bottom: '64px', overflow: 'hidden' }}>
+          <GovtSchemes isDark={isDark} />
         </div>
       )}
 
@@ -513,14 +515,6 @@ function App() {
         isDark={isDark}
       />
 
-      {/* ── Demo Control ─────────────────────────────────────────────────── */}
-      <DemoControl
-        hospitals={hospitals}
-        onSetAllICUFull={handleSetAllICUFull}
-        onSetAllICUAvailable={handleSetAllICUAvailable}
-        onSetHospitalICU={handleSetHospitalICU}
-        isDark={isDark}
-      />
     </main>
   );
 }

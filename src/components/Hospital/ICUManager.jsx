@@ -9,17 +9,11 @@ import React from 'react';
 import { BedDouble, Plus, Minus, DollarSign, Shield } from 'lucide-react';
 import { INSURANCE_OPTIONS } from '../../data/hospitals';
 
-const COST_OPTIONS = [
-  { value: 'low', label: '₹ Low', color: 'bg-green-100 text-green-700 border-green-200' },
-  { value: 'medium', label: '₹₹ Medium', color: 'bg-yellow-100 text-yellow-700 border-yellow-200' },
-  { value: 'high', label: '₹₹₹ High', color: 'bg-red-100 text-red-700 border-red-200' },
-];
 
 const ICUManager = ({
   hospital,
   isDark = false,
   onUpdateICU,
-  onUpdateCostLevel,
   onToggleInsurance,
 }) => {
   if (!hospital) return (
@@ -97,26 +91,6 @@ const ICUManager = ({
         </div>
       </div>
 
-      {/* Cost Level */}
-      <div className={`rounded-2xl border p-5 ${card}`}>
-        <div className="flex items-center gap-2 mb-4">
-          <DollarSign className="w-5 h-5 text-green-500" />
-          <h3 className={`text-sm font-bold ${textPrimary}`}>Cost Level</h3>
-        </div>
-        <div className="flex gap-2">
-          {COST_OPTIONS.map(opt => (
-            <button
-              key={opt.value}
-              onClick={() => onUpdateCostLevel?.(opt.value)}
-              className={`flex-1 py-3 rounded-xl text-xs font-bold border-2 transition-all active:scale-95
-                ${hospital.costLevel === opt.value ? opt.color + ' border-current shadow-sm' : isDark ? 'bg-slate-700 text-slate-300 border-slate-600' : 'bg-gray-50 text-gray-500 border-gray-100 hover:border-gray-300'}
-              `}
-            >
-              {opt.label}
-            </button>
-          ))}
-        </div>
-      </div>
 
       {/* Insurance Schemes */}
       <div className={`rounded-2xl border p-5 ${card}`}>

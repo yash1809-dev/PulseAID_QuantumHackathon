@@ -31,11 +31,11 @@ const HospitalList = ({
   const textSecondary = isDark ? 'text-slate-400' : 'text-gray-500';
 
   // Loading
-  if (isProcessing) {
+  // Loading state removed for instantaneous feel.
+  if (isProcessing && rankedList.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 gap-3">
-        <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
-        <p className={`text-sm font-medium ${textSecondary}`}>Finding best hospitals...</p>
+        <Loader2 className="w-6 h-6 text-blue-500 animate-spin opacity-20" />
       </div>
     );
   }
