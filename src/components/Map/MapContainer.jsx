@@ -63,13 +63,14 @@ const MapContainer = ({
     mapRef.current.setStyle(mapStyle);
   }, [mapStyle, mapLoaded]);
 
+  const hasFlownToUser = useRef(false);
+
   // --- User location marker ---
   useEffect(() => {
     if (!mapRef.current || !mapLoaded || !userLocation) return;
 
     if (!userMarkerRef.current) {
       const el = document.createElement('div');
-      // Explicit sizing prevents anchor drifting on zoom
       el.style.width = '28px';
       el.style.height = '28px';
       el.style.position = 'relative';
@@ -82,16 +83,19 @@ const MapContainer = ({
       userMarkerRef.current = new mapboxgl.Marker({ element: el, anchor: 'center' })
         .setLngLat([userLocation.lng, userLocation.lat])
         .addTo(mapRef.current);
+    } else {
+      userMarkerRef.current.setLngLat([userLocation.lng, userLocation.lat]);
+    }
 
-      // Instantly focus map on user location when first detected
+    // Fly to user only once per session when location is first available
+    if (!hasFlownToUser.current) {
       mapRef.current.flyTo({
         center: [userLocation.lng, userLocation.lat],
         zoom: 13.5,
         essential: true,
-        duration: 2000
+        duration: 2500
       });
-    } else {
-      userMarkerRef.current.setLngLat([userLocation.lng, userLocation.lat]);
+      hasFlownToUser.current = true;
     }
   }, [userLocation, mapLoaded]);
 

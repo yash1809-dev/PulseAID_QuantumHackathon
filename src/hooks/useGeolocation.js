@@ -10,31 +10,42 @@ const PUNE_FALLBACK = { lat: 18.5204, lng: 73.8567 };
 const useGeolocation = () => {
   const [location, setLocation] = useState(null);
   const [locationError, setLocationError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!navigator.geolocation) {
       console.warn('Geolocation not supported. Using Pune fallback.');
       setLocation(PUNE_FALLBACK);
+      setLoading(false);
       return;
     }
 
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setLocation({
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude,
-        });
-      },
-      (err) => {
-        console.warn('Geolocation denied/failed. Using Pune fallback.', err.message);
-        setLocationError(err.message);
-        setLocation(PUNE_FALLBACK);
-      },
-      { timeout: 8000, maximumAge: 60000 }
-    );
+    const options = {
+      enableHighAccuracy: true, // Force GPS
+      timeout: 15000,          // Wait up to 15s
+      maximumAge: 0            // Don't use cached location
+    };
+
+    const success = (pos) => {
+      console.log('[Geo] Real location detected:', pos.coords.latitude, pos.coords.longitude);
+      setLocation({
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude,
+      });
+      setLoading(false);
+    };
+
+    const error = (err) => {
+      console.warn(`[Geo] Error (${err.code}): ${err.message}. Using Pune fallback.`);
+      setLocationError(err.message);
+      setLocation(PUNE_FALLBACK);
+      setLoading(false);
+    };
+
+    navigator.geolocation.getCurrentPosition(success, error, options);
   }, []);
 
-  return { location, locationError };
+  return { location, locationError, loading };
 };
 
 export default useGeolocation;
