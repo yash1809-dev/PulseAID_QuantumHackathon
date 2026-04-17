@@ -315,6 +315,7 @@ function App() {
         <HospitalPortal
           hospitals={hospitals}
           doctors={doctors}
+          ambulances={ambulances}
           activeRequest={activeRequest}
           isDark={isDark}
           onUpdateICU={handleUpdateICU}

@@ -10,9 +10,10 @@ import { useAuth } from '../../contexts/AuthContext';
 import ICUManager from './ICUManager';
 import DoctorManager from './DoctorManager';
 import IncomingPatient from './IncomingPatient';
+import AmbulanceFleet from './AmbulanceFleet';
 import {
   LayoutDashboard, BedDouble, Stethoscope, Ambulance, LogOut,
-  TrendingUp, Clock, Shield
+  TrendingUp, Clock, Shield, Activity
 } from 'lucide-react';
 
 const TABS = [
@@ -20,11 +21,13 @@ const TABS = [
   { id: 'icu',       label: 'ICU',        Icon: BedDouble },
   { id: 'doctors',   label: 'Doctors',    Icon: Stethoscope },
   { id: 'incoming',  label: 'Incoming',   Icon: Ambulance },
+  { id: 'fleet',     label: 'Fleet',      Icon: Activity },
 ];
 
 const HospitalPortal = ({
   hospitals = [],
   doctors = [],
+  ambulances = [],
   activeRequest = null,
   isDark = false,
   onUpdateICU,
@@ -130,6 +133,13 @@ const HospitalPortal = ({
                     color="green"
                     isDark={isDark}
                   />
+                  <StatCard
+                    icon={Activity}
+                    label="Fleet Available"
+                    value={`${ambulances.filter(a => a.status === 'available').length}/${ambulances.length}`}
+                    color="amber"
+                    isDark={isDark}
+                  />
                 </div>
 
                 {/* Hospital info */}
@@ -173,10 +183,12 @@ const HospitalPortal = ({
           </div>
         )}
 
-        {/* ── Incoming Patient ─────────────────────────────────────── */}
-        {activeTab === 'incoming' && (
+        {/* ── Ambulance Fleet ─────────────────────────────────────────── */}
+        {activeTab === 'fleet' && (
           <div className="animate-fade-in">
-            <IncomingPatient
+            <AmbulanceFleet
+              ambulances={ambulances}
+              hospitals={hospitals}
               activeRequest={activeRequest}
               hospitalId={hospital?.id}
               isDark={isDark}

@@ -77,13 +77,19 @@ export const initialHospitals = [
 export const initialAmbulances = [
   {
     id: 'amb-001',
+    plateNumber: 'MH-12-AM-101',
+    driverName: 'Ramesh Kumar',
+    type: 'Advance Life Support',
     lat: 18.5300,
     lng: 73.8760,
     status: 'available',
-    speed: 40 // km/h (simulate nominal speed)
+    speed: 40
   },
   {
     id: 'amb-002',
+    plateNumber: 'MH-12-AM-102',
+    driverName: 'Suresh Patil',
+    type: 'Basic Life Support',
     lat: 18.5035,
     lng: 73.8275,
     status: 'available',
@@ -91,6 +97,9 @@ export const initialAmbulances = [
   },
   {
     id: 'amb-003',
+    plateNumber: 'MH-12-AM-103',
+    driverName: 'Anita Deshmukh',
+    type: 'Cardiac Care',
     lat: 18.5220,
     lng: 73.8690,
     status: 'available',
@@ -98,6 +107,9 @@ export const initialAmbulances = [
   },
   {
     id: 'amb-004',
+    plateNumber: 'MH-12-AM-104',
+    driverName: 'Vikram Singh',
+    type: 'Basic Life Support',
     lat: 18.5110,
     lng: 73.8450,
     status: 'busy',
@@ -105,6 +117,9 @@ export const initialAmbulances = [
   },
   {
     id: 'amb-005',
+    plateNumber: 'MH-12-AM-105',
+    driverName: 'Pooja Hegde',
+    type: 'Advance Life Support',
     lat: 18.5140,
     lng: 73.8360,
     status: 'available',
