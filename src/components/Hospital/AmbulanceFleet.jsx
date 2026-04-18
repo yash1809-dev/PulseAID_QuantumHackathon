@@ -82,6 +82,13 @@ const AmbulanceFleet = ({
                 onChange={e => setAddForm(f => ({...f, driverPhone: e.target.value}))}
                 placeholder="Contact Phone"
                 className={`w-full rounded-xl border px-3 py-2 text-xs ${inputCls}`} />
+              <select value={addForm.type}
+                onChange={e => setAddForm(f => ({...f, type: e.target.value}))}
+                className={`w-full rounded-xl border px-3 py-2 text-xs ${inputCls}`}>
+                <option value="Basic Life Support">Basic Life Support</option>
+                <option value="Advance Life Support">Advance Life Support</option>
+                <option value="Cardiac Care">Cardiac Care</option>
+              </select>
               <div className="flex gap-2">
                 <button
                   onClick={() => {
