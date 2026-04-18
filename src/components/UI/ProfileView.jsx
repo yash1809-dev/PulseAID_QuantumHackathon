@@ -213,7 +213,7 @@ const ProfileView = ({
         </div>
 
         <p className={`text-center text-xs ${textSecondary} opacity-50 pb-6`}>
-          MedConnect — Profile Settings v1.0
+          PulseAID — Profile Settings v1.0
         </p>
       </div>
     </div>

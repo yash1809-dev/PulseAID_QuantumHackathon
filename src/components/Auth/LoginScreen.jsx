@@ -42,11 +42,11 @@ const LoginScreen = () => {
       <div className="relative w-full max-w-md mx-4">
         {/* Logo / Branding */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-2xl shadow-blue-500/30 mb-4">
-            <Heart className="w-8 h-8 text-white" fill="currentColor" />
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl mb-4 shadow-2xl shadow-teal-500/30">
+            <img src="/logo.png" alt="PulseAID" className="w-20 h-20 rounded-3xl object-cover" />
           </div>
-          <h1 className="text-3xl font-black text-white tracking-tight mb-1">MedConnect</h1>
-          <p className="text-slate-400 text-sm">Unified Digital Health Ecosystem</p>
+          <h1 className="text-3xl font-black text-white tracking-tight mb-1">PulseAID</h1>
+          <p className="text-slate-400 text-sm">Emergency Care, Smarter</p>
         </div>
 
         {/* Card */}
