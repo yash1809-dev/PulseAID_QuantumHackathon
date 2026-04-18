@@ -64,7 +64,7 @@ const GovtSchemes = ({ isDark = false }) => {
 
   if (activeStep === 'ayushman_form') {
     return (
-      <div className="p-4 animate-fade-in pb-24">
+      <div className="p-4 animate-fade-in pb-24 h-full overflow-y-auto">
         {/* Header */}
         <div className="flex items-center gap-3 mb-6">
           <button 
@@ -158,7 +158,7 @@ const GovtSchemes = ({ isDark = false }) => {
   }
 
   return (
-    <div className="p-4 animate-fade-in pb-24">
+    <div className="p-4 animate-fade-in pb-24 h-full overflow-y-auto">
       {/* Header */}
       <div className="mb-6">
         <p className="text-[10px] font-black uppercase text-blue-600 tracking-widest leading-none mb-1">State & National</p>

@@ -569,7 +569,9 @@ function App() {
 
       {/* ── Medical Records tab ───────────────────────────────────────────── */}
       {activeTab === 'records' && (
-        <MedicalRecordsPage user={user} isDark={isDark} />
+        <div style={{ position: 'absolute', inset: 0, bottom: '64px', overflow: 'hidden' }}>
+          <MedicalRecordsPage user={user} isDark={isDark} />
+        </div>
       )}
 
       {/* ── Bottom Sheet (overlays map, map tab only) ─────────────────────── */}

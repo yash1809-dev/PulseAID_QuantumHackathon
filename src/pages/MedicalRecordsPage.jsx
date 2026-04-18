@@ -100,7 +100,7 @@ const MedicalRecordsPage = ({ user, isDark = false }) => {
   }
 
   return (
-    <div className={`${bg} fixed inset-0 z-[60] flex flex-col`}>
+    <div className={`${bg} h-full w-full flex flex-col`}>
       {/* Header */}
       <div className={`px-5 py-4 border-b shrink-0 flex items-center justify-between ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-gray-100'}`}>
         <div>
