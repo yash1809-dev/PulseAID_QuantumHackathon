@@ -581,27 +581,18 @@ function App() {
             onHospitalSelect={setSelectedHospital}
           />
 
-          {/* ── Floating UI Stack (Tracker, Notices, Status) ── */}
+          {/* ── Floating UI Stack (Tracker, Status) ── */}
           <div className="absolute bottom-[200px] left-0 right-0 z-30 flex flex-col items-center justify-end gap-3 pointer-events-none px-3">
             
-            {/* UserDoctorNotice */}
-            {activeRequest && user?.primaryDoctorId && (
-              <div className="pointer-events-auto w-full max-w-sm">
-                <UserDoctorNotice
-                  doctorName={doctors.find(d => d.id === user.primaryDoctorId)?.name}
-                  specialty={doctors.find(d => d.id === user.primaryDoctorId)?.specialty}
-                  recommendation={recommendation}
-                  isDark={isDark}
-                />
-              </div>
-            )}
-
-            {/* Request Tracker */}
-            {activeRequest && (
+            {/* Expanded Request Tracker (Floats on Map) */}
+            {activeRequest && !isTrackerMinimized && (
               <div className="pointer-events-auto w-full max-w-sm">
                 <RequestTracker
                   request={activeRequest}
                   ambulances={ambulances}
+                  isMinimized={false}
+                  onMinimize={() => setIsTrackerMinimized(true)}
+                  onMaximize={() => setIsTrackerMinimized(false)}
                   onDismiss={handleDismissRequest}
                 />
               </div>
