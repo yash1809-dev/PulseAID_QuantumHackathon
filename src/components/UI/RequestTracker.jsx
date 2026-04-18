@@ -31,22 +31,24 @@ const STATUS_CONFIG = {
   },
 };
 
-const RequestTracker = ({ request, ambulances = [], onDismiss }) => {
-  const [isMinimized, setIsMinimized] = useState(false);
+const RequestTracker = ({ request, ambulances = [], isMinimized, onMinimize, onMaximize, onDismiss }) => {
   const config = STATUS_CONFIG[request.status] || STATUS_CONFIG.pending;
   const driver = ambulances.find(a => a.id === request.ambulanceId);
   const canCancel = request.status !== 'arrived';
 
   if (isMinimized) {
     return (
-      <div className="w-full max-w-sm px-3 animate-slide-up mx-auto pointer-events-auto">
+      <div className="w-full animate-slide-up pointer-events-auto">
         <button
-          onClick={() => setIsMinimized(false)}
-          className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl shadow-lg border border-gray-100 ${config.color} hover:opacity-90 transition-all active:scale-95`}
+          onClick={onMaximize}
+          className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl shadow-sm border border-gray-100 ${config.color} hover:opacity-90 transition-all active:scale-95`}
         >
           <div className="flex items-center gap-2 text-white">
             <div className={`${config.pulse ? 'animate-pulse' : ''}`}>{config.icon}</div>
-            <span className="text-sm font-bold">{request.status === 'en_route' ? `ETA: ${request.eta}` : config.label}</span>
+            <div className="text-left">
+              <span className="block text-xs font-bold leading-none">{request.status === 'en_route' ? 'Ambulance En Route' : config.label}</span>
+              <span className="block text-[10px] text-white/80 mt-0.5">{request.status === 'en_route' ? `ETA: ${request.eta}` : config.sublabel}</span>
+            </div>
           </div>
           <Maximize2 className="w-4 h-4 text-white/70" />
         </button>
@@ -55,7 +57,7 @@ const RequestTracker = ({ request, ambulances = [], onDismiss }) => {
   }
 
   return (
-    <div className="w-full max-w-sm px-3 animate-slide-up mx-auto pointer-events-auto">
+    <div className="w-full max-w-sm animate-slide-up mx-auto pointer-events-auto">
       <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
 
         {/* Header */}
@@ -71,7 +73,7 @@ const RequestTracker = ({ request, ambulances = [], onDismiss }) => {
           </div>
           {canCancel && (
             <button
-              onClick={() => setIsMinimized(true)}
+              onClick={onMinimize}
               className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition active:scale-95"
               title="Minimize Tracker"
             >

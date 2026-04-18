@@ -42,6 +42,10 @@ const BottomSheet = ({
   insurance, setInsurance,
   budget, setBudget,
   priority, setPriority,
+
+  // Injected UI from App.jsx
+  doctorNotice,
+  requestTracker,
 }) => {
   const sheetRef = useRef(null);
   const dragRef = useRef({ startY: 0, startHeight: 0, dragging: false });
@@ -132,8 +136,12 @@ const BottomSheet = ({
 
       {/* ── Collapsed Summary ────────────────────────────────────────── */}
       {sheetHeight <= snapCollapsed + 20 && (
-        <div className="px-5 pb-2 flex items-center justify-between">
-          {isProcessing ? null : displayHospital ? (
+        <div className="px-5 pb-2 w-full flex items-center justify-between">
+          {requestTracker ? (
+            <div className="w-full flex-1 min-w-0">
+              {requestTracker}
+            </div>
+          ) : isProcessing ? null : displayHospital ? (
             <>
               <div className="flex-1 min-w-0 pr-2">
                 <p className="text-[9px] font-black uppercase tracking-widest text-blue-600 mb-0.5 leading-none">
@@ -169,6 +177,11 @@ const BottomSheet = ({
       {/* ── Expanded Content ─────────────────────────────────────────── */}
       {sheetHeight > snapCollapsed + 20 && (
         <div className="overflow-y-auto h-full pb-4">
+          {doctorNotice && (
+            <div className="mb-2">
+              {doctorNotice}
+            </div>
+          )}
           {/* Hospital Detail Panel (existing — UNCHANGED) */}
           {displayHospital && (
             <div className="border-b" style={{ borderColor: isDark ? '#334155' : '#f3f4f6' }}>

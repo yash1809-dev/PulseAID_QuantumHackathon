@@ -63,6 +63,7 @@ function App() {
   const { user, role, isAuthenticated } = useAuth();
   const [doctors, setDoctors] = useState([]);
   const [activeTab, setActiveTab] = useState('map'); // 'map' | 'doctors' | 'profile'
+  const [isTrackerMinimized, setIsTrackerMinimized] = useState(false);
 
   // Filter state (from user prefs, user can override inline)
   const [insurance, setInsurance] = useState(user?.insurance || 'none');
@@ -181,6 +182,7 @@ function App() {
     if (!userLocation) return;
     if (activeRequest && activeRequest.status !== 'arrived') return;
 
+    setIsTrackerMinimized(false);
     const nearestAmb = findNearestAmbulance(ambulances, userLocation.lat, userLocation.lng);
     const targetHospital = selectedHospital || bestMatch || nearestHospital;
 
@@ -661,9 +663,32 @@ function App() {
         </div>
       )}
 
-      {/* ── Bottom Sheet (overlays map, map tab only) ─────────────────────── */}
+          {/* ── Bottom Sheet (overlays map, map tab only) ─────────────────────── */}
       {activeTab === 'map' && (
         <BottomSheet
+          // UI Injections
+          doctorNotice={
+            activeRequest && user?.primaryDoctorId ? (
+              <UserDoctorNotice
+                doctorName={doctors.find(d => d.id === user.primaryDoctorId)?.name}
+                specialty={doctors.find(d => d.id === user.primaryDoctorId)?.specialty}
+                recommendation={recommendation}
+                isDark={isDark}
+              />
+            ) : null
+          }
+          requestTracker={
+            activeRequest && isTrackerMinimized ? (
+              <RequestTracker
+                request={activeRequest}
+                ambulances={ambulances}
+                isMinimized={true}
+                onMinimize={() => setIsTrackerMinimized(true)}
+                onMaximize={() => setIsTrackerMinimized(false)}
+                onDismiss={handleDismissRequest}
+              />
+            ) : null
+          }
           // Existing BottomPanel props
           selectedHospital={selectedHospital}
           nearestHospital={bestMatch || nearestHospital}
