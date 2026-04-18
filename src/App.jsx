@@ -42,7 +42,7 @@ import { doctorService } from './services/doctorService';
 import useMatchingEngine from './hooks/useMatchingEngine';
 // ── Continuity of Care imports ──────────────────────────────────────────────────────
 import careService from './services/careService';
-import { recommendationsStore, alertsStore } from './services/syncService';
+import { recommendationsStore, alertsStore, ambulanceStore } from './services/syncService';
 import { getSnapshotByUserId } from './services/emergencySnapshotService';
 import UserDoctorNotice from './components/Care/UserDoctorNotice';
 import MedicalRecordsPage from './pages/MedicalRecordsPage';
@@ -270,6 +270,8 @@ function App() {
             )
           );
           setActiveRequest((prev) => ({ ...prev, status: 'arrived', eta: '0 min', distance: '0 m' }));
+          // Clear live ambulance feed for hospital
+          ambulanceStore.clear();
           return;
         }
 
@@ -277,6 +279,18 @@ function App() {
         setAmbulances((prev) =>
           prev.map((a) => (a.id === nearestAmb.id ? { ...a, lat, lng } : a))
         );
+
+        // ── Publish live ambulance position to hospital tab ──────────────
+        ambulanceStore.set({
+          lat,
+          lng,
+          ambulanceId: nearestAmb.id,
+          hospitalId: targetHospital.id,
+          hospitalLat: targetHospital.lat,
+          hospitalLng: targetHospital.lng,
+          timestamp: Date.now(),
+        });
+        // ─────────────────────────────────────────────────────────────────
 
         const remaining = coords.slice(idx);
         const remainingDistKm = remaining.reduce((acc, coord, i) => {

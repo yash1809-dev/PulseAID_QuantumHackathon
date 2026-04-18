@@ -9,12 +9,13 @@
  */
 
 import React, { useState } from 'react';
-import { ArrowLeft, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, AlertTriangle, MessageCircle } from 'lucide-react';
 import EmergencyAlertCard from '../components/Care/EmergencyAlertCard';
 import LiveVitalsPanel    from '../components/Care/LiveVitalsPanel';
 import PatientReportsPanel from '../components/Care/PatientReportsPanel';
 import RecommendationModal from '../components/Care/RecommendationModal';
 import EmergencySnapshotCard from '../components/Records/EmergencySnapshotCard';
+import DoctorHospitalChat from '../components/Care/DoctorHospitalChat';
 import { sendRecommendation }  from '../services/careService';
 
 const EmergencyDoctorAssist = ({
@@ -24,6 +25,7 @@ const EmergencyDoctorAssist = ({
   onBack,         // callback to go back to normal dashboard tabs
 }) => {
   const [showModal, setShowModal] = useState(false);
+  const [showChat,  setShowChat]  = useState(false);
   const [localAlert, setLocalAlert] = useState(alert);
 
   const bg           = isDark ? 'bg-slate-900' : 'bg-gray-50';
@@ -146,6 +148,18 @@ const EmergencyDoctorAssist = ({
           {localAlert?.recommendation ? '✅ Update Recommendation' : '🩺 Send Treatment Recommendation'}
         </button>
 
+        {/* Contact Hospital button */}
+        <button
+          onClick={() => setShowChat(true)}
+          className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black text-sm shadow-lg shadow-blue-500/20 hover:opacity-95 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+        >
+          <MessageCircle className="w-5 h-5" />
+          Contact Receiving Hospital
+          <span className="bg-white/20 text-[10px] font-black px-2 py-0.5 rounded-full">
+            {localAlert?.hospitalName || 'Hospital'}
+          </span>
+        </button>
+
       </div>
 
       {/* Recommendation Modal */}
@@ -156,6 +170,18 @@ const EmergencyDoctorAssist = ({
           isDark={isDark}
           onSubmit={handleSendRecommendation}
           onClose={() => setShowModal(false)}
+        />
+      )}
+
+      {/* Doctor-Hospital Chat */}
+      {showChat && localAlert && (
+        <DoctorHospitalChat
+          alertId={localAlert.id}
+          myRole="doctor"
+          myName={doctor?.name || 'Doctor'}
+          otherName={localAlert.hospitalName || 'Hospital'}
+          isDark={isDark}
+          onClose={() => setShowChat(false)}
         />
       )}
     </div>

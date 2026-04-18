@@ -154,7 +154,15 @@ export function syncStore(key, defaultValue = null) {
 }
 
 // ── Pre-built stores for the care layer ──────────────────────────────────────
-export const alertsStore         = syncStore('emergency_alerts', []);
+export const alertsStore          = syncStore('emergency_alerts', []);
 export const recommendationsStore = syncStore('recommendations', {});
 
-export default { syncStore, alertsStore, recommendationsStore };
+// ── New stores for hospital incoming + doctor chat ────────────────────────────
+// ambulanceStore: { lat, lng, ambulanceId, hospitalId, timestamp } | null
+export const ambulanceStore       = syncStore('ambulance_live', null);
+
+// chatStore: [{ id, from, role, text, timestamp, type }]
+// type: 'message' | 'call_start' | 'call_connected' | 'call_ended'
+export const chatStore            = syncStore('doctor_hospital_chat', []);
+
+export default { syncStore, alertsStore, recommendationsStore, ambulanceStore, chatStore };

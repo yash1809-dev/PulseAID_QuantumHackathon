@@ -214,6 +214,19 @@ const HospitalPortal = ({
             />
           </div>
         )}
+
+        {/* ── Incoming Patient ─────────────────────────────────────────── */}
+        {activeTab === 'incoming' && (
+          <div className="animate-fade-in">
+            <IncomingPatient
+              activeRequest={activeRequest}
+              hospitalId={hospital?.id}
+              hospitals={hospitals}
+              ambulances={ambulances}
+              isDark={isDark}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
