@@ -40,7 +40,7 @@ const RecommendationModal = ({
   if (submitted) {
     return (
       <div className={`fixed inset-0 z-50 flex items-end justify-center ${overlay} backdrop-blur-sm`}>
-        <div className={`w-full max-w-md mx-auto rounded-t-3xl border ${card} p-6 animate-slide-up`}>
+        <div className={`w-full max-w-md mx-auto rounded-t-3xl border ${card} p-6 animate-fade-in`}>
           <div className="flex flex-col items-center gap-3 py-4">
             <div className="w-14 h-14 rounded-full bg-teal-100 flex items-center justify-center">
               <CheckCircle2 className="w-8 h-8 text-teal-600" />
@@ -79,7 +79,7 @@ const RecommendationModal = ({
 
   return (
     <div className={`fixed inset-0 z-50 flex items-end justify-center ${overlay} backdrop-blur-sm`}>
-      <div className={`w-full max-w-md mx-auto rounded-t-3xl border ${card} p-5 animate-slide-up`}>
+      <div className={`w-full max-w-md mx-auto rounded-t-3xl border ${card} p-5 animate-fade-in`}>
         {/* Handle */}
         <div className="w-10 h-1 rounded-full bg-gray-300 mx-auto mb-4" />
 

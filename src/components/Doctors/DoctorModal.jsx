@@ -25,7 +25,7 @@ const DoctorModal = ({ doctor, hospitals = [], isDark = false, onClose, onSelect
   return (
     <div className={`fixed inset-0 z-[60] flex items-end sm:items-center justify-center p-4 ${overlay}`} onClick={onClose}>
       <div
-        className={`w-full max-w-md rounded-3xl shadow-2xl overflow-hidden animate-slide-up ${bg}`}
+        className={`w-full max-w-md rounded-3xl shadow-2xl overflow-hidden animate-fade-in ${bg}`}
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
