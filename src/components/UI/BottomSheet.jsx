@@ -198,6 +198,7 @@ const BottomSheet = ({
                 isDark={isDark}
                 onCallAmbulance={onCallAmbulance}
                 onRequestICU={onRequestICU}
+                requestTracker={requestTracker}
               />
               
               {/* If this is the best match and not manually overridden, show AI reasoning */}

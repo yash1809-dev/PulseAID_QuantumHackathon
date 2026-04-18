@@ -10,6 +10,7 @@ const BottomPanel = ({
   isDark = false,
   onCallAmbulance,
   onRequestICU,
+  requestTracker,
 }) => {
   const hospital = selectedHospital || nearestHospital;
   const isRequestActive = activeRequest && activeRequest.status !== 'arrived';
@@ -124,32 +125,40 @@ const BottomPanel = ({
       <div className={`hidden md:block h-16 w-px ${dividerBg} shrink-0`} />
 
       {/* Action Buttons */}
-      <div className="flex flex-col gap-2 shrink-0">
-        <button
-          onClick={onCallAmbulance}
-          disabled={isRequestActive}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-all duration-200
-            ${isRequestActive
-              ? isDark ? 'bg-slate-700 text-slate-500 cursor-not-allowed' : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-              : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-md active:scale-95 shadow-blue-200'
-            }`}
-        >
-          <Ambulance className="w-4 h-4" />
-          {isRequestActive ? 'Dispatching...' : 'Call Ambulance'}
-        </button>
+      <div className="flex flex-col gap-2 shrink-0 w-[140px] sm:w-[180px]">
+        {requestTracker ? (
+          <div className="w-full">
+            {requestTracker}
+          </div>
+        ) : (
+          <>
+            <button
+              onClick={onCallAmbulance}
+              disabled={isRequestActive}
+              className={`flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-all duration-200
+                ${isRequestActive
+                  ? isDark ? 'bg-slate-700 text-slate-500 cursor-not-allowed' : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-md active:scale-95 shadow-blue-200'
+                }`}
+            >
+              <Ambulance className="w-4 h-4" />
+              {isRequestActive ? 'Dispatching...' : 'Call Ambulance'}
+            </button>
 
-        <button
-          onClick={onRequestICU}
-          disabled={isRequestActive || hospital.icu_available === 0}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-all duration-200
-            ${isRequestActive || hospital.icu_available === 0
-              ? isDark ? 'bg-slate-700 text-slate-500 cursor-not-allowed' : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-              : 'bg-red-600 text-white hover:bg-red-700 hover:shadow-md active:scale-95 shadow-red-200'
-            }`}
-        >
-          <BedDouble className="w-4 h-4" />
-          {hospital.icu_available === 0 ? 'ICU Full' : 'Reserve ICU'}
-        </button>
+            <button
+              onClick={onRequestICU}
+              disabled={isRequestActive || hospital.icu_available === 0}
+              className={`flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-all duration-200
+                ${isRequestActive || hospital.icu_available === 0
+                  ? isDark ? 'bg-slate-700 text-slate-500 cursor-not-allowed' : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  : 'bg-red-600 text-white hover:bg-red-700 hover:shadow-md active:scale-95 shadow-red-200'
+                }`}
+            >
+              <BedDouble className="w-4 h-4" />
+              {hospital.icu_available === 0 ? 'ICU Full' : 'Reserve ICU'}
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
