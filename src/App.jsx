@@ -579,47 +579,39 @@ function App() {
             onHospitalSelect={setSelectedHospital}
           />
 
-          {/* Request Tracker (floats above status bar) */}
-          {activeRequest && (
-            <div style={{ position: 'absolute', bottom: '260px', left: 0, right: 0, display: 'flex', justifyContent: 'center', pointerEvents: 'none' }}>
-              <div style={{ width: '100%', maxWidth: '380px', pointerEvents: 'auto' }}>
+          {/* ── Floating UI Stack (Tracker, Notices, Status) ── */}
+          <div className="absolute bottom-[200px] left-0 right-0 z-30 flex flex-col items-center justify-end gap-3 pointer-events-none px-3">
+            
+            {/* UserDoctorNotice */}
+            {activeRequest && user?.primaryDoctorId && (
+              <div className="pointer-events-auto w-full max-w-sm">
+                <UserDoctorNotice
+                  doctorName={doctors.find(d => d.id === user.primaryDoctorId)?.name}
+                  specialty={doctors.find(d => d.id === user.primaryDoctorId)?.specialty}
+                  recommendation={recommendation}
+                  isDark={isDark}
+                />
+              </div>
+            )}
+
+            {/* Request Tracker */}
+            {activeRequest && (
+              <div className="pointer-events-auto w-full max-w-sm">
                 <RequestTracker
                   request={activeRequest}
                   ambulances={ambulances}
                   onDismiss={handleDismissRequest}
                 />
               </div>
-            </div>
-          )}
+            )}
 
-          {/* ── UserDoctorNotice ────────────────────────────────────────────── */}
-          {activeRequest && user?.primaryDoctorId && (
-            <div style={{ position: 'absolute', bottom: '220px', left: 0, right: 0, zIndex: 20, pointerEvents: 'none' }}>
-              <div style={{ pointerEvents: 'auto' }}>
-                <UserDoctorNotice
-                  doctorName={
-                    doctors.find(d => d.id === user.primaryDoctorId)?.name
-                  }
-                  specialty={
-                    doctors.find(d => d.id === user.primaryDoctorId)?.specialty
-                  }
-                  recommendation={recommendation}
-                  isDark={isDark}
-                />
-              </div>
-            </div>
-          )}
-
-          {/* Status Bar (floats above collapsed sheet handle area) */}
-          <div style={{ position: 'absolute', bottom: '200px', left: 0, right: 0, display: 'flex', justifyContent: 'center', pointerEvents: 'none' }}>
-            <div style={{ pointerEvents: 'auto' }}>
-              <StatusBar
-                activeRequest={activeRequest}
-                bestMatch={bestMatch}
-                isSearching={isProcessing}
-                isDark={isDark}
-              />
-            </div>
+            {/* Status Bar */}
+            <StatusBar
+              activeRequest={activeRequest}
+              bestMatch={bestMatch}
+              isSearching={isProcessing}
+              isDark={isDark}
+            />
           </div>
         </div>
       )}

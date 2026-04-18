@@ -4,8 +4,8 @@
  * Shows: status header, ETA/distance, driver info card, cancel/dismiss button.
  */
 
-import React from 'react';
-import { Ambulance, CheckCircle, Clock, MapPin, X, Navigation, Phone, ShieldCheck } from 'lucide-react';
+import React, { useState } from 'react';
+import { Ambulance, CheckCircle, Clock, MapPin, X, Navigation, Phone, ShieldCheck, Maximize2 } from 'lucide-react';
 
 const STATUS_CONFIG = {
   pending: {
@@ -32,12 +32,30 @@ const STATUS_CONFIG = {
 };
 
 const RequestTracker = ({ request, ambulances = [], onDismiss }) => {
+  const [isMinimized, setIsMinimized] = useState(false);
   const config = STATUS_CONFIG[request.status] || STATUS_CONFIG.pending;
   const driver = ambulances.find(a => a.id === request.ambulanceId);
   const canCancel = request.status !== 'arrived';
 
+  if (isMinimized) {
+    return (
+      <div className="w-full max-w-sm px-3 animate-slide-up mx-auto pointer-events-auto">
+        <button
+          onClick={() => setIsMinimized(false)}
+          className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl shadow-lg border border-gray-100 ${config.color} hover:opacity-90 transition-all active:scale-95`}
+        >
+          <div className="flex items-center gap-2 text-white">
+            <div className={`${config.pulse ? 'animate-pulse' : ''}`}>{config.icon}</div>
+            <span className="text-sm font-bold">{request.status === 'en_route' ? `ETA: ${request.eta}` : config.label}</span>
+          </div>
+          <Maximize2 className="w-4 h-4 text-white/70" />
+        </button>
+      </div>
+    );
+  }
+
   return (
-    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 w-full max-w-sm px-3 animate-slide-up">
+    <div className="w-full max-w-sm px-3 animate-slide-up mx-auto pointer-events-auto">
       <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
 
         {/* Header */}
@@ -53,9 +71,9 @@ const RequestTracker = ({ request, ambulances = [], onDismiss }) => {
           </div>
           {canCancel && (
             <button
-              onClick={onDismiss}
+              onClick={() => setIsMinimized(true)}
               className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition active:scale-95"
-              title="Cancel"
+              title="Minimize Tracker"
             >
               <X className="w-3.5 h-3.5 text-white" />
             </button>
@@ -137,9 +155,9 @@ const RequestTracker = ({ request, ambulances = [], onDismiss }) => {
             {canCancel && (
               <button
                 onClick={onDismiss}
-                className="shrink-0 text-[10px] font-bold text-red-500 hover:text-red-600 transition"
+                className="shrink-0 px-3 py-1 bg-red-50 text-[10px] font-bold text-red-600 rounded-lg border border-red-100 hover:bg-red-100 transition active:scale-95"
               >
-                Cancel
+                Cancel Ambulance
               </button>
             )}
           </div>

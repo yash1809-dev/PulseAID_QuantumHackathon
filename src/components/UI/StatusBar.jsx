@@ -23,14 +23,7 @@ const StatusBar = ({ activeRequest, bestMatch, isSearching, isDark = false }) =>
   useEffect(() => {
     let m = null;
 
-    if (activeRequest?.status === 'arrived') {
-      m = STATUS_MESSAGES.arrived;
-    } else if (activeRequest?.status === 'en_route') {
-      m = {
-        ...STATUS_MESSAGES.en_route,
-        text: `🚑 Ambulance en route — ETA ${activeRequest.eta}`,
-      };
-    } else if (activeRequest?.status === 'pending') {
+    if (activeRequest?.status === 'pending') {
       m = STATUS_MESSAGES.pending;
     }
 
@@ -47,7 +40,7 @@ const StatusBar = ({ activeRequest, bestMatch, isSearching, isDark = false }) =>
 
   return (
     <div
-      className={`absolute bottom-2 left-1/2 -translate-x-1/2 z-40 transition-all duration-400
+      className={`z-40 transition-all duration-400 pointer-events-auto
         ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3 pointer-events-none'}
       `}
     >
