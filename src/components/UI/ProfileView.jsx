@@ -6,7 +6,8 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { LogOut, User, Shield, Target, Activity, FileText, Building2, Stethoscope, Moon, Sun, Settings2, Beaker } from 'lucide-react';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { LogOut, User, Shield, Target, Activity, FileText, Building2, Stethoscope, Moon, Sun, Settings2, Beaker, Globe } from 'lucide-react';
 import { INSURANCE_OPTIONS } from '../../data/hospitals';
 import DarkModeToggle from './DarkModeToggle';
 import DemoControl from './DemoControl';
@@ -43,9 +44,11 @@ const ProfileView = ({
   demoProps = {} 
 }) => {
   const { user, updateUserPrefs, logout } = useAuth();
+  const { language, toggleLanguage } = useLanguage();
   const [conditions, setConditions] = useState(user?.medicalConditions || '');
   
   if (!user) return null;
+  const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
   const bg = isDark ? 'bg-slate-900' : 'bg-gray-50';
   const card = isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-100';
@@ -187,6 +190,25 @@ const ProfileView = ({
                 <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${isDark ? 'translate-x-6' : 'translate-x-1'}`} />
               </button>
             </div>
+
+            {/* Language Toggle (Localhost Only) */}
+            {isLocalhost && (
+              <div className={`flex items-center justify-between px-4 py-3.5 ${isDark ? 'divide-slate-700' : 'divide-gray-50'}`}>
+                <div className="flex items-center gap-3">
+                  <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${isDark ? 'bg-slate-700' : 'bg-blue-50'}`}>
+                    <Globe className="w-4 h-4 text-blue-500" />
+                  </div>
+                  <span className={`text-sm font-medium ${textPrimary}`}>Language</span>
+                </div>
+                <button 
+                  onClick={toggleLanguage}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border
+                    ${isDark ? 'bg-slate-700 border-slate-600 text-white hover:bg-slate-600' : 'bg-white border-gray-200 text-blue-600 hover:bg-blue-50'}`}
+                >
+                  {language === 'en' ? 'English (Switch to Hindi)' : 'हिन्दी (Switch to English)'}
+                </button>
+              </div>
+            )}
             
             {/* Demo Control integrated here */}
             <div className="p-4 bg-slate-50/50 dark:bg-slate-900/20">

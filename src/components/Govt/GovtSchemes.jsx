@@ -7,6 +7,7 @@
  */
 
 import React, { useState } from 'react';
+import { useLanguage } from '../../contexts/LanguageContext';
 import {
   ShieldCheck, Baby, Heart, Pill, ExternalLink,
   Info, ChevronRight, CreditCard, Phone, Globe
@@ -149,6 +150,7 @@ const TAG_COLORS = {
 
 // ── Scheme Detail Drawer ──────────────────────────────────────────────────────
 function SchemeDetail({ scheme, isDark, onBack }) {
+  const { t } = useLanguage();
   const textPrimary   = isDark ? 'text-white'      : 'text-gray-800';
   const textSecondary = isDark ? 'text-slate-400'  : 'text-gray-500';
   const cardBg        = isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-100';
@@ -165,7 +167,7 @@ function SchemeDetail({ scheme, isDark, onBack }) {
           <ChevronRight className="w-4 h-4 rotate-180" />
         </button>
         <div>
-          <p className="text-[10px] font-black uppercase text-blue-600 tracking-widest leading-none mb-0.5">Scheme Details</p>
+          <p className="text-[10px] font-black uppercase text-blue-600 tracking-widest leading-none mb-0.5">{t('schemes.details.title')}</p>
           <p className={`text-sm font-black ${textPrimary}`}>{scheme.title}</p>
         </div>
       </div>
@@ -185,13 +187,13 @@ function SchemeDetail({ scheme, isDark, onBack }) {
 
         {/* Eligibility */}
         <div className={`rounded-2xl border p-4 ${cardBg}`}>
-          <p className={`text-[10px] font-black uppercase tracking-widest mb-2 ${textSecondary}`}>Who Can Apply</p>
+          <p className={`text-[10px] font-black uppercase tracking-widest mb-2 ${textSecondary}`}>{t('schemes.details.who')}</p>
           <p className={`text-sm leading-relaxed ${textPrimary}`}>{scheme.eligibility}</p>
         </div>
 
         {/* How to Apply Steps */}
         <div className={`rounded-2xl border p-4 ${cardBg}`}>
-          <p className={`text-[10px] font-black uppercase tracking-widest mb-3 ${textSecondary}`}>How to Apply</p>
+          <p className={`text-[10px] font-black uppercase tracking-widest mb-3 ${textSecondary}`}>{t('schemes.details.how')}</p>
           <div className="space-y-2">
             {scheme.steps.map((step, i) => (
               <div key={i} className={`flex items-start gap-3 p-2.5 rounded-xl ${stepBg}`}>
@@ -213,7 +215,7 @@ function SchemeDetail({ scheme, isDark, onBack }) {
             className="flex items-center justify-center gap-2 w-full py-4 rounded-2xl bg-blue-600 text-white font-black text-sm shadow-lg shadow-blue-500/20 hover:bg-blue-700 transition-all active:scale-95"
           >
             <Globe className="w-4 h-4" />
-            Apply on Official Portal
+            {t('schemes.apply_btn')}
             <ExternalLink className="w-3.5 h-3.5 opacity-70" />
           </a>
 
@@ -226,7 +228,7 @@ function SchemeDetail({ scheme, isDark, onBack }) {
                 ${isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-700'}`}
             >
               <Info className="w-4 h-4 text-blue-500" />
-              Check Eligibility
+              {t('schemes.details.check_eligibility')}
               <ExternalLink className="w-3.5 h-3.5 opacity-50" />
             </a>
           )}
@@ -238,14 +240,13 @@ function SchemeDetail({ scheme, isDark, onBack }) {
                 ${isDark ? 'bg-slate-700 border-slate-600 text-green-400' : 'bg-green-50 border-green-200 text-green-700'}`}
             >
               <Phone className="w-4 h-4" />
-              Helpline: {scheme.helpline}
+              {t('schemes.details.helpline')} {scheme.helpline}
             </a>
           )}
         </div>
 
         <p className={`text-[10px] text-center leading-relaxed ${textSecondary}`}>
-          Tapping "Apply on Official Portal" opens the Government of India website in your browser.
-          PulseAID does not collect or store any data entered on government portals.
+          {t('schemes.details.disclaimer')}
         </p>
       </div>
     </div>
@@ -254,6 +255,7 @@ function SchemeDetail({ scheme, isDark, onBack }) {
 
 // ── Main Component ─────────────────────────────────────────────────────────────
 const GovtSchemes = ({ isDark = false }) => {
+  const { t } = useLanguage();
   const [activeScheme, setActiveScheme] = useState(null);
 
   if (activeScheme) {
@@ -277,10 +279,10 @@ const GovtSchemes = ({ isDark = false }) => {
     <div className="h-full flex flex-col">
       {/* Header */}
       <div className={`px-5 py-4 border-b shrink-0 ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-gray-100'}`}>
-        <p className="text-[10px] font-black uppercase text-blue-600 tracking-widest leading-none mb-1">State & National</p>
-        <h1 className={`text-2xl font-black ${textPrimary}`}>Government Health Schemes</h1>
+        <p className="text-[10px] font-black uppercase text-blue-600 tracking-widest leading-none mb-1">{t('schemes.header.state')}</p>
+        <h1 className={`text-2xl font-black ${textPrimary}`}>{t('schemes.header.title')}</h1>
         <p className={`text-[11px] mt-0.5 ${textSecondary}`}>
-          Tap any scheme to view official enrollment details and apply directly on the government portal.
+          {t('schemes.header.subtitle')}
         </p>
       </div>
 
@@ -296,13 +298,13 @@ const GovtSchemes = ({ isDark = false }) => {
                 <CreditCard className="w-5 h-5 text-white" />
               </div>
               <span className="text-[9px] font-black bg-white/20 text-white px-2 py-0.5 rounded-full uppercase tracking-widest">
-                🇮🇳 Flagship Scheme
+                {t('schemes.flagship')}
               </span>
               <h2 className="text-xl font-black text-white mt-2 mb-1">{featured.title}</h2>
               <p className="text-sm text-blue-100 mb-4 leading-relaxed">{featured.benefit} — free cashless treatment at empanelled hospitals.</p>
               <div className="flex items-center gap-2 bg-white text-blue-700 font-black text-xs px-4 py-2.5 rounded-xl w-fit shadow-lg">
                 <Globe className="w-3.5 h-3.5" />
-                Apply on Official Portal
+                {t('schemes.apply_btn')}
                 <ExternalLink className="w-3 h-3 opacity-60" />
               </div>
             </div>
@@ -312,7 +314,7 @@ const GovtSchemes = ({ isDark = false }) => {
 
         {/* Other schemes */}
         <div>
-          <h3 className={`text-[10px] font-black uppercase tracking-widest mb-3 ${textSecondary}`}>More Health Schemes</h3>
+          <h3 className={`text-[10px] font-black uppercase tracking-widest mb-3 ${textSecondary}`}>{t('schemes.more_title')}</h3>
           <div className="space-y-3">
             {others.map(scheme => (
               <button
@@ -332,7 +334,7 @@ const GovtSchemes = ({ isDark = false }) => {
                   </div>
                   <p className={`text-[11px] leading-snug ${textSecondary} line-clamp-1`}>{scheme.benefit}</p>
                   <p className={`text-[10px] mt-1 text-blue-500 font-bold flex items-center gap-1`}>
-                    <ExternalLink className="w-2.5 h-2.5" /> View & Apply on Govt Portal
+                    <ExternalLink className="w-2.5 h-2.5" /> {t('schemes.view_apply')}
                   </p>
                 </div>
                 <ChevronRight className={`w-4 h-4 shrink-0 ${textSecondary}`} />
@@ -344,10 +346,10 @@ const GovtSchemes = ({ isDark = false }) => {
         {/* Disclaimer */}
         <div className={`p-4 rounded-2xl border border-dashed text-center space-y-1 ${isDark ? 'bg-slate-900/50 border-slate-700' : 'bg-blue-50/50 border-blue-100'}`}>
           <p className={`text-[10px] font-bold ${isDark ? 'text-slate-400' : 'text-blue-700'}`}>
-            🔒 PulseAID redirects you to official Indian Government portals only
+            {t('schemes.disclaimer.title')}
           </p>
           <p className={`text-[9px] ${isDark ? 'text-slate-600' : 'text-gray-400'}`}>
-            We do not collect, store or process any data you enter on government websites.
+            {t('schemes.disclaimer.desc')}
           </p>
         </div>
       </div>

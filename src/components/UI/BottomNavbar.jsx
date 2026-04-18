@@ -6,6 +6,7 @@
  */
 
 import React from 'react';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { Map, Stethoscope, User, Landmark, FileHeart } from 'lucide-react';
 
 const TABS = [
@@ -17,6 +18,7 @@ const TABS = [
 ];
 
 const BottomNavbar = ({ activeTab = 'map', onTabChange, isDark = false }) => {
+  const { t } = useLanguage();
   const bg = isDark
     ? 'bg-slate-900/95 border-slate-700'
     : 'bg-white/95 border-gray-100';
@@ -43,7 +45,7 @@ const BottomNavbar = ({ activeTab = 'map', onTabChange, isDark = false }) => {
               )}
               <Icon className={`w-5 h-5 transition-transform duration-200 ${isActive ? 'scale-110' : 'scale-100'}`} />
               <span className={`text-[10px] font-bold uppercase tracking-wider ${isActive ? 'opacity-100' : 'opacity-60'}`}>
-                {label}
+                {t(`nav.${id}`)}
               </span>
             </button>
           );

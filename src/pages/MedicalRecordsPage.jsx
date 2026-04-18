@@ -5,6 +5,7 @@
  * No AI/OCR extraction. EmergencySnapshotCard stays at the top (existing).
  */
 import React, { useState, useEffect, useCallback } from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
 import { Loader2 } from 'lucide-react';
 import RecordUploader from '../components/Records/RecordUploader';
 import EmergencySnapshotCard from '../components/Records/EmergencySnapshotCard';
@@ -14,6 +15,7 @@ import { getSnapshotByUserId } from '../services/emergencySnapshotService';
 import { isSupabaseConfigured } from '../lib/supabase';
 
 const MedicalRecordsPage = ({ user, isDark = false }) => {
+  const { t } = useLanguage();
   const [snapshot, setSnapshot]             = useState(null);
   const [records, setRecords]               = useState([]);
   const [loadingRecords, setLoadingRecords] = useState(true);
@@ -50,8 +52,8 @@ const MedicalRecordsPage = ({ user, isDark = false }) => {
       {/* Header */}
       <div className={`px-5 py-4 border-b shrink-0 flex items-center justify-between ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-gray-100'}`}>
         <div>
-          <h1 className={`text-lg font-black ${isDark ? 'text-white' : 'text-gray-900'}`}>🩺 Medical Records</h1>
-          <p className="text-[10px] text-gray-500">Upload and organise your documents by category</p>
+          <h1 className={`text-lg font-black ${isDark ? 'text-white' : 'text-gray-900'}`}>{t('records.title')}</h1>
+          <p className="text-[10px] text-gray-500">{t('records.subtitle')}</p>
         </div>
         <div className={`px-3 py-1 rounded-full text-[10px] font-black ${isSupabaseConfigured ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}`}>
           {isSupabaseConfigured ? '● ONLINE' : '● OFFLINE'}
@@ -61,7 +63,7 @@ const MedicalRecordsPage = ({ user, isDark = false }) => {
       <div className="flex-1 overflow-y-auto px-4 py-5 space-y-5 pb-24">
         {/* Emergency Snapshot */}
         <section>
-          <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">Emergency Summary</p>
+          <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">{t('records.emergency_summary')}</p>
           {snapshot ? (
             <EmergencySnapshotCard
               snapshot={snapshot}
@@ -87,7 +89,7 @@ const MedicalRecordsPage = ({ user, isDark = false }) => {
 
         {/* Grouped records list */}
         <section>
-          <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-3">Your Documents</p>
+          <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-3">{t('records.documents')}</p>
           {loadingRecords ? (
             <div className="flex justify-center py-10">
               <Loader2 className="w-6 h-6 animate-spin opacity-20" />
