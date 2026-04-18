@@ -59,7 +59,7 @@ const HospitalPortal = ({
   const icuPct = hospital ? (hospital.icu_available || 0) / (hospital.icu_total || 1) : 0;
 
   return (
-    <div className={`min-h-screen ${bg} flex flex-col`}>
+    <div className={`h-[100dvh] w-full overflow-hidden ${bg} flex flex-col`}>
       {/* Top Header */}
       <div className={`${navBg} border-b px-5 py-4 flex items-center justify-between`}>
         <div>
