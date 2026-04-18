@@ -14,11 +14,11 @@ import React, { useState, useEffect } from 'react';
 import {
   Ambulance, Clock, Navigation, CheckCircle, CheckCircle2,
   AlertTriangle, Heart, Pill, Syringe, User, MessageCircle,
-  Phone, Activity, Droplets
+  Phone, Activity, Droplets, Maximize2, Minimize2, X
 } from 'lucide-react';
 import HospitalIncomingMap from './HospitalIncomingMap';
 import DoctorHospitalChat  from '../Care/DoctorHospitalChat';
-import { alertsStore }     from '../../services/syncService';
+import { alertsStore, ambulanceStore } from '../../services/syncService';
 import { getSnapshotById } from '../../services/emergencySnapshotService';
 import { mockUsers }       from '../../data/users';
 
@@ -29,9 +29,11 @@ const IncomingPatient = ({
   ambulances = [],
   isDark = false,
 }) => {
-  const [showChat, setShowChat]     = useState(false);
-  const [activeAlert, setActiveAlert] = useState(null);
-  const [snapshot, setSnapshot]     = useState(null);
+  const [showChat, setShowChat]       = useState(false);
+  const [isMapExpanded, setIsMapExpanded] = useState(false);
+  const [activeAlert, setActiveAlert]   = useState(null);
+  const [snapshot, setSnapshot]         = useState(null);
+  const [liveAmbulance, setLiveAmbulance] = useState(() => ambulanceStore.get());
 
   const card = isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-100';
   const textPrimary    = isDark ? 'text-white' : 'text-gray-800';
@@ -50,6 +52,12 @@ const IncomingPatient = ({
     hydrate();
     return alertsStore.subscribe(() => hydrate());
   }, [hospitalId]);
+
+  // ── Subscribe to live ambulance store for phase info ─────────────────────
+  useEffect(() => {
+    setLiveAmbulance(ambulanceStore.get());
+    return ambulanceStore.subscribe(data => setLiveAmbulance(data));
+  }, []);
 
   // ── Load medical snapshot when alert has snapshotId ───────────────────────
   useEffect(() => {
@@ -84,16 +92,56 @@ const IncomingPatient = ({
     );
   }
 
-  const { status, eta, distance, ambulanceId } = activeRequest;
-
   const STATUS_INFO = {
-    pending:  { label: 'Preparing Dispatch', color: 'from-orange-500 to-amber-500',    icon: Clock,      sub: 'Ambulance being assigned' },
-    en_route: { label: '🚨 Patient En Route', color: 'from-blue-600 to-indigo-600',    icon: Ambulance,  sub: 'Ambulance dispatched • Team on standby' },
-    arrived:  { label: '✅ Patient Arrived',  color: 'from-green-600 to-emerald-600',  icon: CheckCircle, sub: 'Please receive the patient at ER entrance' },
+    // Phase-aware status map — keyed by ambulanceStore.phase or activeRequest.status
+    to_patient: {
+      label: '🚑 En Route to Patient',
+      color: 'from-blue-600 to-indigo-600',
+      icon: Ambulance,
+      sub: 'Ambulance dispatched — heading to patient location',
+    },
+    pickup: {
+      label: '⏳ Picking Up Patient...',
+      color: 'from-amber-500 to-orange-500',
+      icon: Clock,
+      sub: 'Ambulance reached patient — loading patient on board',
+    },
+    to_hospital: {
+      label: '🚨 Transporting Patient to Hospital',
+      color: 'from-red-600 to-rose-600',
+      icon: Ambulance,
+      sub: 'Patient on board — en route to your ER',
+    },
+    pending: {
+      label: 'Preparing Dispatch',
+      color: 'from-orange-500 to-amber-500',
+      icon: Clock,
+      sub: 'Ambulance being assigned',
+    },
+    arrived: {
+      label: '✅ Patient Arrived at Hospital',
+      color: 'from-green-600 to-emerald-600',
+      icon: CheckCircle,
+      sub: 'Please receive the patient at ER entrance',
+    },
+    en_route: {
+      label: '🚑 En Route to Patient',
+      color: 'from-blue-600 to-indigo-600',
+      icon: Ambulance,
+      sub: 'Ambulance dispatched — heading to patient location',
+    },
   };
 
-  const info = STATUS_INFO[status] || STATUS_INFO.pending;
+  // Determine current phase: prefer ambulanceStore phase, fallback to activeRequest.status
+  const currentPhase = liveAmbulance?.phase || activeRequest?.status || 'pending';
+  const info = STATUS_INFO[currentPhase] || STATUS_INFO.pending;
   const { label, color, icon: Icon, sub } = info;
+
+  // ETA: for to_hospital phase, use ambulanceStore.eta; otherwise use activeRequest.eta
+  const displayEta = currentPhase === 'to_hospital'
+    ? (liveAmbulance?.eta || activeRequest?.eta || '—')
+    : (currentPhase === 'arrived' ? '0 min' : currentPhase === 'pending' ? '—' : activeRequest?.eta || '—');
+  const displayDist = currentPhase === 'arrived' ? '0 m' : currentPhase === 'pickup' ? '0 m' : (activeRequest?.distance || '—');
 
   // Determine doctor name from alert
   const doctorName = activeAlert?.doctorName || 'Family Doctor';
@@ -121,7 +169,7 @@ const IncomingPatient = ({
             <p className="text-white font-black text-base">{label}</p>
             <p className="text-white/70 text-xs mt-0.5">{sub}</p>
           </div>
-          {status === 'en_route' && (
+          {(currentPhase === 'to_patient' || currentPhase === 'to_hospital' || currentPhase === 'en_route') && (
             <span className="w-2.5 h-2.5 bg-white rounded-full animate-pulse" />
           )}
         </div>
@@ -130,34 +178,42 @@ const IncomingPatient = ({
         <div className="px-5 py-4 grid grid-cols-2 gap-4">
           <div className={`${sectionBg} rounded-xl p-3`}>
             <p className={`text-[10px] font-bold uppercase tracking-wider ${textSecondary} mb-1 flex items-center gap-1`}>
-              <Clock className="w-3 h-3" /> ETA
+              <Clock className="w-3 h-3" />
+              {currentPhase === 'to_hospital' ? 'ETA to Hospital' : 'ETA to Patient'}
             </p>
-            <p className={`text-2xl font-black ${textPrimary}`}>
-              {status === 'pending' ? '—' : status === 'arrived' ? '0 min' : eta}
-            </p>
+            <p className={`text-2xl font-black ${textPrimary}`}>{displayEta}</p>
           </div>
           <div className={`${sectionBg} rounded-xl p-3`}>
             <p className={`text-[10px] font-bold uppercase tracking-wider ${textSecondary} mb-1 flex items-center gap-1`}>
               <Navigation className="w-3 h-3" /> Distance
             </p>
-            <p className={`text-2xl font-black ${textPrimary}`}>
-              {status === 'pending' ? '—' : status === 'arrived' ? '0 m' : distance}
-            </p>
+            <p className={`text-2xl font-black ${textPrimary}`}>{displayDist}</p>
           </div>
         </div>
       </div>
 
       {/* ── Live Ambulance Map ──────────────────────────────────────────── */}
-      {status !== 'arrived' && (
+      {currentPhase !== 'arrived' && (
         <div className={`rounded-2xl overflow-hidden border ${card}`}>
           <div className={`px-4 py-3 border-b ${isDark ? 'border-slate-700' : 'border-gray-100'} flex items-center justify-between`}>
             <p className={`text-xs font-black uppercase tracking-wider ${textSecondary} flex items-center gap-2`}>
               <Activity className="w-3.5 h-3.5" /> Live Tracking
+              {currentPhase === 'to_hospital' && (
+                <span className="text-rose-500 text-[9px] font-bold bg-rose-50 px-2 py-0.5 rounded-full">Patient On Board</span>
+              )}
             </p>
-            <span className="text-[10px] font-bold text-red-500 flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse inline-block" />
-              LIVE
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-bold text-red-500 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse inline-block" /> LIVE
+              </span>
+              <button
+                onClick={() => setIsMapExpanded(true)}
+                className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all active:scale-90 ${isDark ? 'bg-slate-700 text-slate-300 hover:bg-slate-600' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}
+                title="Expand map"
+              >
+                <Maximize2 className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
           <div className="p-3">
             <HospitalIncomingMap hospital={hospital} isDark={isDark} />
@@ -282,12 +338,12 @@ const IncomingPatient = ({
           <CheckCircle2 className="w-3.5 h-3.5 text-green-500" /> Preparation Checklist
         </p>
         {[
-          { label: 'ICU bed allocated',         done: status !== 'pending' },
-          { label: 'Medical team on standby',    done: status !== 'pending' },
-          { label: `Blood type (${bloodGroup}) cross-matched`, done: status === 'en_route' || status === 'arrived' },
-          { label: 'Emergency kit ready',        done: status === 'en_route' || status === 'arrived' },
-          { label: 'Patient intake form prepared', done: status === 'arrived' },
-          { label: 'ER team notified',           done: status === 'arrived' },
+          { label: 'ICU bed allocated',         done: currentPhase !== 'pending' },
+          { label: 'Medical team on standby',    done: currentPhase !== 'pending' },
+          { label: `Blood type (${bloodGroup}) cross-matched`, done: currentPhase === 'to_hospital' || currentPhase === 'arrived' },
+          { label: 'Emergency kit ready',        done: currentPhase === 'to_hospital' || currentPhase === 'arrived' },
+          { label: 'Patient intake form prepared', done: currentPhase === 'arrived' },
+          { label: 'ER team at entrance',        done: currentPhase === 'arrived' },
         ].map((item, i) => (
           <div key={i} className={`flex items-center gap-3 py-2 border-b last:border-0 ${isDark ? 'border-slate-700' : 'border-gray-50'}`}>
             <CheckCircle2 className={`w-4 h-4 shrink-0 ${item.done ? 'text-green-500' : isDark ? 'text-slate-600' : 'text-gray-200'}`} />
@@ -312,6 +368,42 @@ const IncomingPatient = ({
             </span>
           )}
         </button>
+      )}
+
+      {/* ── Fullscreen Map Overlay ─────────────────────────────────────── */}
+      {isMapExpanded && (
+        <div className="fixed inset-0 z-[9998] flex flex-col" style={{ background: '#000' }}>
+          <div className="flex items-center justify-between px-4 py-3 bg-gray-900">
+            <div>
+              <p className="text-[10px] font-black uppercase text-red-400 tracking-widest flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse inline-block" /> Live Ambulance Tracking
+              </p>
+              <p className="text-white text-sm font-black">
+                {currentPhase === 'to_hospital' ? '🚨 Transporting Patient → Hospital' : '🚑 En Route to Patient'}
+              </p>
+            </div>
+            <button
+              onClick={() => setIsMapExpanded(false)}
+              className="w-9 h-9 rounded-xl bg-gray-800 text-gray-300 flex items-center justify-center hover:bg-gray-700 transition-all"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+          <div className="flex-1" style={{ minHeight: 0 }}>
+            <HospitalIncomingMap hospital={hospital} isDark={true} height="100%" />
+          </div>
+          <div className="px-4 py-3 bg-gray-900 flex justify-between items-center">
+            <span className="text-xs text-gray-400">
+              {currentPhase === 'to_hospital' ? `ETA to Hospital: ${displayEta}` : `ETA to Patient: ${displayEta}`}
+            </span>
+            <button
+              onClick={() => setIsMapExpanded(false)}
+              className="flex items-center gap-1.5 text-xs font-bold text-blue-400"
+            >
+              <Minimize2 className="w-3.5 h-3.5" /> Minimize
+            </button>
+          </div>
+        </div>
       )}
 
       {/* ── Chat Modal ─────────────────────────────────────────────────── */}

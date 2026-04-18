@@ -256,22 +256,103 @@ function App() {
       const targetDurationMs = Math.min(durationSeconds * 1000, 45000);
       const stepMs = Math.max(150, Math.floor(targetDurationMs / totalSteps));
 
+      // Helper: generate interpolated coords between two points for phase 2
+      function interpolateRoute(fromLat, fromLng, toLat, toLng, steps = 60) {
+        const pts = [];
+        for (let i = 0; i <= steps; i++) {
+          const t = i / steps;
+          pts.push([fromLng + (toLng - fromLng) * t, fromLat + (toLat - fromLat) * t]);
+        }
+        return pts;
+      }
+
       if (routeAnimRef.current) clearInterval(routeAnimRef.current);
 
+      // ── Phase 1: Ambulance → Patient ──────────────────────────────────────
       routeAnimRef.current = setInterval(() => {
         idx += 1;
         if (idx >= coords.length) {
+          // ── Phase 1 complete: ambulance reached patient ────────────────
           clearInterval(routeAnimRef.current);
-          setAmbulances((prev) =>
-            prev.map((a) =>
-              a.id === nearestAmb.id
-                ? { ...a, status: 'available', lat: userLocation.lat, lng: userLocation.lng }
-                : a
-            )
-          );
-          setActiveRequest((prev) => ({ ...prev, status: 'arrived', eta: '0 min', distance: '0 m' }));
-          // Clear live ambulance feed for hospital
-          ambulanceStore.clear();
+
+          // Brief "picking up patient" pause (2 seconds) then start phase 2
+          ambulanceStore.set({
+            lat: userLocation.lat,
+            lng: userLocation.lng,
+            ambulanceId: nearestAmb.id,
+            hospitalId: targetHospital.id,
+            hospitalLat: targetHospital.lat,
+            hospitalLng: targetHospital.lng,
+            phase: 'pickup',
+            timestamp: Date.now(),
+          });
+
+          setTimeout(() => {
+            // ── Phase 2: Patient → Hospital ──────────────────────────────
+            const returnCoords = interpolateRoute(
+              userLocation.lat, userLocation.lng,
+              targetHospital.lat, targetHospital.lng,
+              80   // 80 interpolated steps for smooth animation
+            );
+            const returnDistKm = getDistanceKm(
+              userLocation.lat, userLocation.lng,
+              targetHospital.lat, targetHospital.lng
+            );
+
+            let returnIdx = 0;
+            const returnStepMs = Math.max(150, Math.floor(Math.min(returnDistKm * 1000 * 3, 30000) / returnCoords.length));
+
+            routeAnimRef.current = setInterval(() => {
+              returnIdx += 1;
+              if (returnIdx >= returnCoords.length) {
+                clearInterval(routeAnimRef.current);
+                // Ambulance arrived at hospital with patient
+                setAmbulances((prev) =>
+                  prev.map((a) =>
+                    a.id === nearestAmb.id
+                      ? { ...a, status: 'available', lat: targetHospital.lat, lng: targetHospital.lng }
+                      : a
+                  )
+                );
+                setActiveRequest((prev) => ({ ...prev, status: 'arrived', eta: '0 min', distance: '0 m' }));
+                ambulanceStore.clear();
+                return;
+              }
+
+              const [rLng, rLat] = returnCoords[returnIdx];
+              setAmbulances((prev) =>
+                prev.map((a) => (a.id === nearestAmb.id ? { ...a, lat: rLat, lng: rLng } : a))
+              );
+
+              const remainingReturn = returnCoords.slice(returnIdx);
+              const remainingReturnKm = remainingReturn.reduce((acc, coord, i) => {
+                if (i === 0) return acc;
+                const [pLng, pLat] = remainingReturn[i - 1];
+                return acc + getDistanceKm(pLat, pLng, coord[1], coord[0]);
+              }, 0);
+
+              // Publish phase 2 position to hospital tab
+              ambulanceStore.set({
+                lat: rLat,
+                lng: rLng,
+                ambulanceId: nearestAmb.id,
+                hospitalId: targetHospital.id,
+                hospitalLat: targetHospital.lat,
+                hospitalLng: targetHospital.lng,
+                phase: 'to_hospital',
+                eta: formatETA(remainingReturnKm),
+                timestamp: Date.now(),
+              });
+
+              // Update user's display with return ETA (en_route status remains)
+              setActiveRequest((prev) => ({
+                ...prev,
+                eta: formatETA(remainingReturnKm),
+                distance: formatDistance(remainingReturnKm),
+              }));
+            }, returnStepMs);
+          }, 2000); // 2 second "pickup" pause
+
           return;
         }
 
@@ -280,7 +361,7 @@ function App() {
           prev.map((a) => (a.id === nearestAmb.id ? { ...a, lat, lng } : a))
         );
 
-        // ── Publish live ambulance position to hospital tab ──────────────
+        // Publish phase 1 position to hospital tab
         ambulanceStore.set({
           lat,
           lng,
@@ -288,9 +369,9 @@ function App() {
           hospitalId: targetHospital.id,
           hospitalLat: targetHospital.lat,
           hospitalLng: targetHospital.lng,
+          phase: 'to_patient',
           timestamp: Date.now(),
         });
-        // ─────────────────────────────────────────────────────────────────
 
         const remaining = coords.slice(idx);
         const remainingDistKm = remaining.reduce((acc, coord, i) => {

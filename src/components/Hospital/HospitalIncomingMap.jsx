@@ -14,7 +14,7 @@ import { ambulanceStore } from '../../services/syncService';
 
 const PUNE_CENTER = [73.8567, 18.5204];
 
-const HospitalIncomingMap = ({ hospital, isDark = false }) => {
+const HospitalIncomingMap = ({ hospital, isDark = false, height = 240 }) => {
   const containerRef = useRef(null);
   const mapRef       = useRef(null);
   const ambMarkerRef = useRef(null);
@@ -148,7 +148,7 @@ const HospitalIncomingMap = ({ hospital, isDark = false }) => {
   }
 
   return (
-    <div className="relative w-full rounded-2xl overflow-hidden" style={{ height: 240 }}>
+    <div className="relative w-full rounded-2xl overflow-hidden" style={{ height: typeof height === 'number' ? height : '100%' }}>
       <div ref={containerRef} className="w-full h-full" />
 
       {/* Loading overlay */}
