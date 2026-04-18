@@ -5,7 +5,7 @@
  * No AI/OCR extraction. EmergencySnapshotCard stays at the top (existing).
  */
 import React, { useState, useEffect, useCallback } from 'react';
-import { ShieldAlert, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import RecordUploader from '../components/Records/RecordUploader';
 import EmergencySnapshotCard from '../components/Records/EmergencySnapshotCard';
 import CategoryRecordList from '../components/Records/CategoryRecordList';
@@ -62,12 +62,19 @@ const MedicalRecordsPage = ({ user, isDark = false }) => {
         {/* Emergency Snapshot */}
         <section>
           <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">Emergency Summary</p>
-          {snapshot ? <EmergencySnapshotCard snapshot={snapshot} isDark={isDark} /> : (
-            <div className={`p-6 border-2 border-dashed rounded-2xl text-center ${isDark ? 'border-slate-800 text-slate-600' : 'border-gray-200 text-gray-400'}`}>
-              <ShieldAlert className="w-8 h-8 mx-auto mb-2 opacity-50" />
-              <p className="text-xs font-bold">No Emergency Snapshot</p>
-              <p className="text-[10px] mt-1 opacity-70">Upload a prescription or discharge summary to auto-generate one</p>
-            </div>
+          {snapshot ? (
+            <EmergencySnapshotCard
+              snapshot={snapshot}
+              userId={user?.id}
+              isDark={isDark}
+              onUpdated={(updated) => setSnapshot(updated)}
+            />
+          ) : (
+            <EmergencySnapshotCard
+              userId={user?.id}
+              isDark={isDark}
+              onUpdated={(updated) => setSnapshot(updated)}
+            />
           )}
         </section>
 
