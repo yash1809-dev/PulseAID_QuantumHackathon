@@ -372,7 +372,7 @@ const IncomingPatient = ({
 
       {/* ── Fullscreen Map Overlay ─────────────────────────────────────── */}
       {isMapExpanded && (
-        <div className="fixed inset-0 z-[9998] flex flex-col" style={{ background: '#000' }}>
+        <div className="fixed inset-0 z-[99999] flex flex-col" style={{ background: '#000' }}>
           <div className="flex items-center justify-between px-4 py-3 bg-gray-900">
             <div>
               <p className="text-[10px] font-black uppercase text-red-400 tracking-widest flex items-center gap-1.5">
@@ -390,7 +390,7 @@ const IncomingPatient = ({
             </button>
           </div>
           <div className="flex-1" style={{ minHeight: 0 }}>
-            <HospitalIncomingMap hospital={hospital} isDark={true} height="100%" />
+            <HospitalIncomingMap hospital={hospital} isDark={true} height="100%" interactive={true} />
           </div>
           <div className="px-4 py-3 bg-gray-900 flex justify-between items-center">
             <span className="text-xs text-gray-400">

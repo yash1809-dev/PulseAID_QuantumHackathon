@@ -14,7 +14,7 @@ import { ambulanceStore } from '../../services/syncService';
 
 const PUNE_CENTER = [73.8567, 18.5204];
 
-const HospitalIncomingMap = ({ hospital, isDark = false, height = 240 }) => {
+const HospitalIncomingMap = ({ hospital, isDark = false, height = 240, interactive = false }) => {
   const containerRef = useRef(null);
   const mapRef       = useRef(null);
   const ambMarkerRef = useRef(null);
@@ -48,7 +48,7 @@ const HospitalIncomingMap = ({ hospital, isDark = false, height = 240 }) => {
         : 'mapbox://styles/mapbox/streets-v12',
       center,
       zoom: 13,
-      interactive: false,
+      interactive: interactive,
       attributionControl: false,
     });
 
@@ -61,7 +61,7 @@ const HospitalIncomingMap = ({ hospital, isDark = false, height = 240 }) => {
       mapRef.current = null;
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [interactive]);
 
   // ── Place/update hospital marker ──────────────────────────────────────────
   useEffect(() => {
