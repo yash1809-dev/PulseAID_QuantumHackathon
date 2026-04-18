@@ -14,12 +14,14 @@ import React, { useState, useEffect } from 'react';
 import {
   Ambulance, Clock, Navigation, CheckCircle, CheckCircle2,
   AlertTriangle, Heart, Pill, Syringe, User, MessageCircle,
-  Phone, Activity, Droplets, Maximize2, Minimize2, X
+  Phone, Activity, Droplets, Maximize2, Minimize2, X, FileText
 } from 'lucide-react';
 import HospitalIncomingMap from './HospitalIncomingMap';
 import DoctorHospitalChat  from '../Care/DoctorHospitalChat';
+import CategoryRecordList  from '../Records/CategoryRecordList';
 import { alertsStore, ambulanceStore } from '../../services/syncService';
 import { getSnapshotById } from '../../services/emergencySnapshotService';
+import { getRecordsByUser } from '../../services/recordsService';
 import { mockUsers }       from '../../data/users';
 
 const IncomingPatient = ({
@@ -33,6 +35,8 @@ const IncomingPatient = ({
   const [isMapExpanded, setIsMapExpanded] = useState(false);
   const [activeAlert, setActiveAlert]   = useState(null);
   const [snapshot, setSnapshot]         = useState(null);
+  const [patientRecords, setPatientRecords] = useState([]);
+  const [loadingRecords, setLoadingRecords] = useState(false);
   const [liveAmbulance, setLiveAmbulance] = useState(() => ambulanceStore.get());
 
   const card = isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-100';
@@ -69,6 +73,19 @@ const IncomingPatient = ({
       .then(({ data }) => setSnapshot(data))
       .catch(() => setSnapshot(null));
   }, [activeAlert?.snapshotId]);
+
+  // ── Load patient's uploaded documents ───────────────────────────────────────
+  useEffect(() => {
+    if (!activeAlert?.patientId) {
+      setPatientRecords([]);
+      return;
+    }
+    setLoadingRecords(true);
+    getRecordsByUser(activeAlert.patientId)
+      .then(({ data }) => setPatientRecords(data || []))
+      .catch(() => setPatientRecords([]))
+      .finally(() => setLoadingRecords(false));
+  }, [activeAlert?.patientId]);
 
   // ── Get fallback patient data from mock users ─────────────────────────────
   const mockPatient = activeAlert?.patientId
@@ -328,6 +345,32 @@ const IncomingPatient = ({
             <p className={`text-xs text-center py-2 ${textSecondary}`}>
               Patient has not uploaded medical records yet. Basic info from profile shown above.
             </p>
+          )}
+        </div>
+      </div>
+
+      {/* ── Patient Documents (uploaded records) ────────────────────────── */}
+      <div className={`rounded-2xl border ${card}`}>
+        <div className={`px-4 pt-4 pb-3 border-b ${isDark ? 'border-slate-700' : 'border-gray-100'}`}>
+          <p className={`text-[10px] font-black uppercase tracking-wider ${textSecondary} flex items-center gap-2`}>
+            <FileText className="w-3.5 h-3.5 text-blue-500" /> Patient Documents
+            {patientRecords.length > 0 && (
+              <span className="text-blue-500 text-[9px] font-bold bg-blue-50 px-2 py-0.5 rounded-full">
+                {patientRecords.length} file{patientRecords.length !== 1 ? 's' : ''}
+              </span>
+            )}
+          </p>
+          <p className={`text-[10px] mt-0.5 ${textSecondary}`}>Uploaded by patient — prescriptions expand by default</p>
+        </div>
+        <div className="p-4">
+          {loadingRecords ? (
+            <p className={`text-xs text-center py-4 ${textSecondary}`}>Loading documents…</p>
+          ) : (
+            <CategoryRecordList
+              records={patientRecords}
+              isDark={isDark}
+              doctorView={true}
+            />
           )}
         </div>
       </div>

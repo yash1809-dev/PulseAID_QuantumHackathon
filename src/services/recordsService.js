@@ -154,4 +154,33 @@ export async function deleteRecord(recordId) {
   return { error: null };
 }
 
-export default { uploadFile, saveRecord, getRecords, verifyRecord, deleteRecord };
+/**
+ * Save a categorized record (no OCR — direct upload).
+ * category: 'prescription' | 'lab_report' | 'radiology' | 'bill' | 'discharge' | 'other'
+ * note: optional user note
+ */
+export async function saveCategorizedRecord({ user_id, file_url, category, note = '' }) {
+  return saveRecord({
+    user_id,
+    file_url,
+    file_type: category,       // repurpose file_type column for category slug
+    extracted: { category_label: CATEGORY_META[category]?.label || category, note },
+    confidence: 1.0,
+    verified: true,
+  });
+}
+
+/** Alias for use in IncomingPatient (fetches by patientId === user_id) */
+export const getRecordsByUser = getRecords;
+
+/** Category metadata (shared between UI + service) */
+export const CATEGORY_META = {
+  prescription:    { label: 'Prescriptions',       icon: '💊', color: 'blue' },
+  lab_report:      { label: 'Lab Reports',          icon: '🧪', color: 'purple' },
+  radiology:       { label: 'Radiology / Scans',    icon: '🩻', color: 'indigo' },
+  bill:            { label: 'Medical Bills',        icon: '🧾', color: 'yellow' },
+  discharge:       { label: 'Discharge Summaries',  icon: '📋', color: 'teal' },
+  other:           { label: 'Other Documents',      icon: '📁', color: 'gray' },
+};
+
+export default { uploadFile, saveRecord, saveCategorizedRecord, getRecords, getRecordsByUser, verifyRecord, deleteRecord, CATEGORY_META };
