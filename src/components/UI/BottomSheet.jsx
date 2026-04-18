@@ -136,34 +136,39 @@ const BottomSheet = ({
 
       {/* ── Collapsed Summary ────────────────────────────────────────── */}
       {sheetHeight <= snapCollapsed + 20 && (
-        <div className="px-5 pb-2 w-full flex items-center justify-between">
-          {requestTracker ? (
-            <div className="w-full flex-1 min-w-0">
-              {requestTracker}
-            </div>
-          ) : isProcessing ? null : displayHospital ? (
+        <div className={`px-5 pb-2 w-full flex ${requestTracker ? 'flex-col gap-3' : 'items-center justify-between'}`}>
+          {isProcessing ? null : displayHospital ? (
             <>
-              <div className="flex-1 min-w-0 pr-2">
-                <p className="text-[9px] font-black uppercase tracking-widest text-blue-600 mb-0.5 leading-none">
-                  {selectedHospital ? 'Active Selection' : 'AI Best Match'}
-                </p>
-                <p className={`text-base font-black truncate leading-tight ${textPrimary}`}>
-                  {displayHospital.name}
-                </p>
-                {userLocation && displayHospital._distanceKm !== undefined && (
-                  <div className={`flex items-center gap-1 mt-0.5 ${textSecondary}`}>
-                    <MapPin className="w-2.5 h-2.5" />
-                    <span className="text-[10px] font-bold">{displayHospital._distanceKm} km away</span>
-                  </div>
+              <div className="flex items-center justify-between w-full">
+                <div className="flex-1 min-w-0 pr-2">
+                  <p className="text-[9px] font-black uppercase tracking-widest text-blue-600 mb-0.5 leading-none">
+                    {selectedHospital ? 'Active Selection' : 'AI Best Match'}
+                  </p>
+                  <p className={`text-base font-black truncate leading-tight ${textPrimary}`}>
+                    {displayHospital.name}
+                  </p>
+                  {userLocation && displayHospital._distanceKm !== undefined && (
+                    <div className={`flex items-center gap-1 mt-0.5 ${textSecondary}`}>
+                      <MapPin className="w-2.5 h-2.5" />
+                      <span className="text-[10px] font-bold">{displayHospital._distanceKm} km away</span>
+                    </div>
+                  )}
+                </div>
+                {!requestTracker && (
+                  <button
+                    onClick={onCallAmbulance}
+                    disabled={activeRequest && activeRequest.status !== 'arrived'}
+                    className="shrink-0 px-5 py-2.5 rounded-xl bg-blue-600 text-white text-[11px] font-black uppercase tracking-wider shadow-lg shadow-blue-500/30 hover:bg-blue-700 transition-all active:scale-90 disabled:opacity-50 disabled:grayscale"
+                  >
+                    Dispatch
+                  </button>
                 )}
               </div>
-              <button
-                onClick={onCallAmbulance}
-                disabled={activeRequest && activeRequest.status !== 'arrived'}
-                className="shrink-0 px-5 py-2.5 rounded-xl bg-blue-600 text-white text-[11px] font-black uppercase tracking-wider shadow-lg shadow-blue-500/30 hover:bg-blue-700 transition-all active:scale-90 disabled:opacity-50 disabled:grayscale"
-              >
-                Dispatch
-              </button>
+              {requestTracker && (
+                <div className="w-full">
+                  {requestTracker}
+                </div>
+              )}
             </>
           ) : (
             <div className="flex items-center gap-2">
