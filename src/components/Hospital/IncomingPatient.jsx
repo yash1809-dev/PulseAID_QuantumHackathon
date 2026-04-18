@@ -239,7 +239,7 @@ const IncomingPatient = ({
           </div>
           <div className={`text-center shrink-0`}>
             <p className={`text-[10px] ${textSecondary}`}>Ambulance</p>
-            <p className={`text-xs font-black uppercase ${textPrimary}`}>{ambulanceId?.toUpperCase() || '—'}</p>
+            <p className={`text-xs font-black uppercase ${textPrimary}`}>{activeRequest?.ambulanceId?.toUpperCase() || '—'}</p>
           </div>
         </div>
       </div>
